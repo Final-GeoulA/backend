@@ -11,7 +11,7 @@ import kr.co.ictedu.geoulA.vo.BoardVO;
 @Service
 public class BoardService {
 	@Autowired
-	private BoardDAO boardDao;
+	private BoardDao boardDao;
 	
 	public void add (BoardVO vo) {
 		boardDao.add(vo);
@@ -19,7 +19,7 @@ public class BoardService {
 	public void del (int num) {
 		boardDao.delete(num);
 	}
-	public List<BoardVO> blist(Map<String, String> map) {
+	public List<BoardVO> blist(Map<String, Object> map) {
 		return boardDao.blist(map);
 	}
 	void hit (int num) {

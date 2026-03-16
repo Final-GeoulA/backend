@@ -76,9 +76,9 @@ public class BoardController {
 	
 	
 	@RequestMapping("/list")
-	public Map<String, Object> BoaradList(@RequestParam Map<String, String> paramMap, HttpServletRequest req){
+	public Map<String, Object> BoaradList(@RequestParam Map<String, Object> paramMap, HttpServletRequest req){
 		pageVO.setNumPerPage(12);
-		String cPage = paramMap.get("cPage");
+		String cPage = (String)paramMap.get("cPage");
 
 //		int totalCnt = boardService.totalCount(paramMap);
 //		pageVO.setTotalRecord(totalCnt);
@@ -100,7 +100,7 @@ public class BoardController {
 		
 	
 		Map<String, Object> response = new HashMap<>();
-		Map<String, String> map =new HashMap<>(paramMap);
+		Map<String, Object> map =new HashMap<>(paramMap);
 		map.put("begin", String.valueOf(pageVO.getBeginPerPage()));
 		map.put("end", String.valueOf(pageVO.getEndPerPage()));
 		List<BoardVO> list = boardService.blist(map);
