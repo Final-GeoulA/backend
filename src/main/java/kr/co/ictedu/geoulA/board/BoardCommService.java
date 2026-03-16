@@ -12,7 +12,7 @@ import kr.co.ictedu.geoulA.vo.Board_CommVO;
 @Service
 public class BoardCommService {
 	@Autowired
-	private Board_CommDAO boardCommDao;
+	private Board_CommDao boardCommDao;
 	
 	@Transactional
 	public void add (Board_CommVO vo) {

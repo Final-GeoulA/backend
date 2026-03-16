@@ -8,9 +8,9 @@ import org.apache.ibatis.annotations.Mapper;
 import kr.co.ictedu.geoulA.vo.BoardVO;
 
 @Mapper
-public interface BoardDAO {
+public interface BoardDao {
 	void add (BoardVO vo);
-	List<BoardVO> blist(Map<String, String> map);
+	List<BoardVO> blist(Map<String, Object> map);
 	
 	void hit (int num);
 	void elike (int num);
