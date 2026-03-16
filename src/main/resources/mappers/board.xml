@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.ictedu.geoulA.board.BoardDAO">
+<mapper namespace="kr.co.ictedu.geoulA.board.BoardDao">
 <insert id="add" parameterType="boardvo">
 	insert into board values(board_seq.nextVal,#{title},#{writer},#{member_num},#{content},#{imgn},0,0,#{reip},sysdate)
 </insert>
