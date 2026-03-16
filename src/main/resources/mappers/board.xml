@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding ="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.ictedu.geoulA.board.BoardDAO">
+<insert id="add" parameterType="boardvo">
+	insert into board values(board_seq.nextVal,#{title},#{writer},#{member_num},#{content},#{imgn},0,0,#{reip},sysdate)
+</insert>
+
+<select id="blist" resultType="boardvo" parameterType="map">
+SELECT num, title, writer,content,hit,elike,reip,bdate,imgn,row_num FROM (
+SELECT num, title, writer,content,hit,elike,reip,bdate,imgn, ROW_NUMBER() 
+OVER(ORDER BY num desc) AS row_num FROM BOARD 
+		<where>
+            <if test="mypage == 'true'">
+                AND member_num = #{num}
+            </if>
+            <if test="searchType != null and searchValue != null and searchValue != ''">
+                <choose>
+                    <when test="searchType == 1">
+                        AND writer LIKE '%' || #{searchValue} || '%'
+                    </when>
+                    <when test="searchType == 2">
+                        AND title LIKE '%' || #{searchValue} || '%'
+                    </when>
+                    <when test="searchType == 3">
+                        AND content LIKE '%' || #{searchValue} || '%'
+                    </when>
+                </choose>
+            </if>
+        </where>
+) numbered_rows WHERE row_num BETWEEN #{begin} AND #{end}
+</select>
+
+	<select id="totalCount" resultType="int" parameterType="map">
+		select count(*) cnt from board
+			<where>
+            	<if test="mypage == 'true'">
+                	AND member_num = #{num}
+            	</if>
+            	<if test="searchType != null and searchValue != null and searchValue != ''">
+                	<choose>
+                    	<when test="searchType == 1">
+                        	AND writer LIKE '%' || #{searchValue} || '%'
+                    	</when>
+                    	<when test="searchType == 2">
+                        	AND title LIKE '%' || #{searchValue} || '%'
+                    	</when>
+                    	<when test="searchType == 3">
+                        	AND content LIKE '%' || #{searchValue} || '%'
+                    	</when>
+                	</choose>
+            	</if>
+        	</where>
+	</select>
+<update id="hit" parameterType="int">
+update board set hit=hit+1 where num=#{num}
+</update>
+<update id="elike" parameterType="int">
+update board set elike=elike+1 where num=#{num}
+</update>
+<select id="detail" parameterType="int">
+select * from board where num=#{num}
+</select>
+<delete id="delete" parameterType="int">
+delete from board where num=#{num}
+</delete>
+</mapper>

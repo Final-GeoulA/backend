@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding ="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.ictedu.geoulA.board.Board_CommDAO">
+<insert id="addComm" parameterType="bcommvo" >
+insert into board_comm values(board_comm_seq.nextVal, #{board_num},#{bwriter},#{member_num},#{bcontent},0,#{reip},sysdate)
+</insert>
+
+<select id="listComm" resultType="bcommvo" parameterType="map" >
+SELECT comm_num, board_num,bwriter,member_num,bcontent,reip,bcdate, row_num FROM (
+SELECT comm_num, board_num,bwriter,member_num,bcontent,reip,bcdate, ROW_NUMBER() 
+OVER(ORDER BY comm_num desc) AS row_num FROM BOARD_comm where board_num=#{board_num}
+) numbered_rows WHERE row_num BETWEEN #{begin} AND #{end} 
+</select> 
+<delete id="delcomm" parameterType="int">
+DELETE FROM BOARD_COMM WHERE comm_num=#{num}
+</delete>
+
+<select id="totalCount" resultType="int" parameterType="map">
+select count(*) cnt from board_comm where board_num=#{board_num}
+</select>
+
+<update id="plusComm">
+    UPDATE BOARD 
+    SET comm_count = comm_count + 1 
+    WHERE num = #{num}
+</update>
+
+<update id="minusComm">
+    UPDATE BOARD 
+    SET comm_count = comm_count - 1 
+    WHERE num = #{num}
+</update>
+
+</mapper>
