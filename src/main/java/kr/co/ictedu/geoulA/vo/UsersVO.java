@@ -17,4 +17,5 @@ public class UsersVO {
 	private int age; // 나이
 	private int skin_type; // 피부타입
 	private int user_coin; // 유저코인
+	private int gender;
 }

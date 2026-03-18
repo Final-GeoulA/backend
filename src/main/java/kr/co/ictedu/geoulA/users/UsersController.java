@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import kr.co.ictedu.geoulA.vo.UsersVO;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 public class UsersController {
 	@Autowired
 	private UsersService usersService;
