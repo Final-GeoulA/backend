@@ -5,21 +5,21 @@
 
 <mapper namespace="kr.co.ictedu.geoulA.board.Board_CommDao">
 <insert id="addComm" parameterType="bcommvo" >
-insert into board_comm values(board_comm_seq.nextVal, #{board_num},#{bwriter},#{member_num},#{bcontent},0,#{reip},sysdate)
+insert into board_comm values(board_comm_seq.nextVal, #{ucode},#{uwriter},#{uontent},0,#{reip},sysdate)
 </insert>
 
 <select id="listComm" resultType="bcommvo" parameterType="map" >
-SELECT comm_num, board_num,bwriter,member_num,bcontent,reip,bcdate, row_num FROM (
-SELECT comm_num, board_num,bwriter,member_num,bcontent,reip,bcdate, ROW_NUMBER() 
-OVER(ORDER BY comm_num desc) AS row_num FROM BOARD_comm where board_num=#{board_num}
+SELECT num, ucode,uwriter,ucontent,reip,bcdate, row_num FROM (
+SELECT num, ucode,uwriter,ucontent,reip,bcdate, ROW_NUMBER() 
+OVER(ORDER BY ucode desc) AS row_num FROM BOARD_skin_comm where ucode=#{num}
 ) numbered_rows WHERE row_num BETWEEN #{begin} AND #{end} 
 </select> 
 <delete id="delcomm" parameterType="int">
-DELETE FROM BOARD_COMM WHERE comm_num=#{num}
+DELETE FROM BOARD_skin_comm WHERE comm_num=#{num}
 </delete>
 
 <select id="totalCount" resultType="int" parameterType="map">
-select count(*) cnt from board_comm where board_num=#{board_num}
+select count(*) cnt from board_skin_comm where board_num=#{board_num}
 </select>
 
 <update id="plusComm">
