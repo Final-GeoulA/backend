@@ -13,14 +13,14 @@ public class BoardVO {
 	private int num;
 	private String title;
 	private String writer;
-	private int member_num;
+//	private int member_num;
 	private String content;
 	private String imgn;
 	private int hit;
 	private int elike;
 	private String reip;
 	private String bdate;
-	private String comm_count;
+//	private String comm_count;
 	private MultipartFile mfile;
 	
 	

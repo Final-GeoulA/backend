@@ -125,7 +125,7 @@ public class BoardController {
 	public ResponseEntity<?> boardComm(@RequestBody Board_CommVO vo, HttpServletRequest req){
 		vo.setReip(req.getRemoteAddr());		
 		boardCommService.add(vo);
-		System.out.println(vo.getBoard_num());
+//		System.out.println(vo.getBoard_num());
 		return ResponseEntity.ok().body("ok");
 	}
 	

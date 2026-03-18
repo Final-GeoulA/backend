@@ -17,7 +17,7 @@ public class BoardCommService {
 	@Transactional
 	public void add (Board_CommVO vo) {
 		boardCommDao.addComm(vo);
-		boardCommDao.plusComm(vo.getBoard_num());
+//		boardCommDao.plusComm(vo.getBoard_num());
 	}
 	
 	public List<Board_CommVO> listComm(Map<String, String> map) {
@@ -29,8 +29,8 @@ public class BoardCommService {
 	}
 	
 	@Transactional
-	public void del (Board_CommVO vo) {
-		boardCommDao.delcomm(vo.getComm_num());
-		boardCommDao.minusComm(vo.getBoard_num());
+	public void del (Board_CommVO num) {
+//		boardCommDao.delcomm(num);
+//		boardCommDao.minusComm(vo.getBoard_num());
 	}
 }
