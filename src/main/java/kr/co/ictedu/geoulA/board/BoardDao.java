@@ -16,5 +16,5 @@ public interface BoardDao {
 	void elike (int num);
 	BoardVO detail(int num);
 	void delete (int num);
-	//int totalCount(Map<String, String> map);
+	int totalCount(Map<String, String> map);
 }

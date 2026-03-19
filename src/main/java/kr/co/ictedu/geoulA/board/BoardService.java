@@ -32,8 +32,8 @@ public class BoardService {
 		hit(num);
 		return boardDao.detail(num);
 	}
-//	public int totalCount(Map<String, String> map) {
-//		return boardDao.totalCount(map);
-//	};
+	public int totalCount(Map<String, String> map) {
+		return boardDao.totalCount(map);
+	};
 
 }
