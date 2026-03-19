@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Alias("boardvo")
-public class BoardVO {
+public class BoardSkinVO {
 	private int num;
 	private String title;
 	private String writer;

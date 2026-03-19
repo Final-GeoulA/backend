@@ -2,7 +2,6 @@ package kr.co.ictedu.geoulA.board;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,12 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 //import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.servlet.http.HttpServletRequest;
-import kr.co.ictedu.geoulA.vo.BoardVO;
-import kr.co.ictedu.geoulA.vo.Board_CommVO;
+import kr.co.ictedu.geoulA.vo.BoardSkinVO;
+import kr.co.ictedu.geoulA.vo.BoardSkinCommVO;
 import kr.co.ictedu.geoulA.vo.PageVO;
 
 
@@ -43,7 +41,7 @@ public class BoardController {
 	private String filePath;
 	
 	@PostMapping("/add")
-	public ResponseEntity<?> addBoard(BoardVO vo, HttpServletRequest req) {
+	public ResponseEntity<?> addBoard(BoardSkinVO vo, HttpServletRequest req) {
 		vo.setReip(req.getRemoteAddr());
 		MultipartFile mf = vo.getMfile();
 		String oriFn =mf.getOriginalFilename();
@@ -70,7 +68,7 @@ public class BoardController {
 	}
 	
 	@GetMapping("/detail")
-	public BoardVO detail(@RequestParam("num") int num) {
+	public BoardSkinVO detail(@RequestParam("num") int num) {
 		return boardService.detail(num);		
 	}
 	
@@ -103,7 +101,7 @@ public class BoardController {
 		Map<String, Object> map =new HashMap<>(paramMap);
 		map.put("begin", String.valueOf(pageVO.getBeginPerPage()));
 		map.put("end", String.valueOf(pageVO.getEndPerPage()));
-		List<BoardVO> list = boardService.blist(map);
+		List<BoardSkinVO> list = boardService.blist(map);
 
 		int startPage =(int)((pageVO.getNowPage()-1)/pageVO.getPagePerBlock())*pageVO.getPagePerBlock()+1;
 		int endPage=startPage+pageVO.getPagePerBlock()-1;
@@ -122,7 +120,7 @@ public class BoardController {
 	}
 	
 	@PostMapping("/commadd")
-	public ResponseEntity<?> boardComm(@RequestBody Board_CommVO vo, HttpServletRequest req){
+	public ResponseEntity<?> boardComm(@RequestBody BoardSkinCommVO vo, HttpServletRequest req){
 		vo.setReip(req.getRemoteAddr());		
 		boardCommService.add(vo);
 //		System.out.println(vo.getBoard_num());
@@ -162,7 +160,7 @@ public class BoardController {
 		Map<String, String> map =new HashMap<>(paramMap);
 		map.put("begin", String.valueOf(pageVO.getBeginPerPage()));
 		map.put("end", String.valueOf(pageVO.getEndPerPage()));
-		List<Board_CommVO> list = boardCommService.listComm(map);
+		List<BoardSkinCommVO> list = boardCommService.listComm(map);
 		
 		int startPage =(int)((pageVO.getNowPage()-1)/pageVO.getPagePerBlock())*pageVO.getPagePerBlock()+1;
 		int endPage=startPage+pageVO.getPagePerBlock()-1;
@@ -180,7 +178,7 @@ public class BoardController {
 		return response;
 	}
 	@PostMapping("/delcomm")
-    public void delComm(@RequestBody Board_CommVO vo) {
+    public void delComm(@RequestBody BoardSkinCommVO vo) {
         boardCommService.del(vo);       
     }
 	@PostMapping("/elike")

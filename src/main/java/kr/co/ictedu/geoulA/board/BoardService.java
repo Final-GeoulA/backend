@@ -6,20 +6,20 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import kr.co.ictedu.geoulA.vo.BoardVO;
+import kr.co.ictedu.geoulA.vo.BoardSkinVO;
 
 @Service
 public class BoardService {
 	@Autowired
 	private BoardDao boardDao;
 	
-	public void add (BoardVO vo) {
+	public void add (BoardSkinVO vo) {
 		boardDao.add(vo);
 	}
 	public void del (int num) {
 		boardDao.delete(num);
 	}
-	public List<BoardVO> blist(Map<String, Object> map) {
+	public List<BoardSkinVO> blist(Map<String, Object> map) {
 		return boardDao.blist(map);
 	}
 	void hit (int num) {
@@ -28,7 +28,7 @@ public class BoardService {
 	public void elike (int num) {
 		boardDao.elike(num);
 	}
-	public BoardVO detail(int num) {
+	public BoardSkinVO detail(int num) {
 		hit(num);
 		return boardDao.detail(num);
 	}
