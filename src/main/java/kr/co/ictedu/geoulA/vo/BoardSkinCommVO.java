@@ -16,5 +16,4 @@ public class BoardSkinCommVO {
 	private int elike;
 	private String reip;
 	private String bcdate;
-	
 }
