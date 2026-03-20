@@ -26,7 +26,7 @@ import kr.co.ictedu.geoulA.vo.PageVO;
 
 
 @RestController
-@RequestMapping("/board")
+@RequestMapping("/board/product")
 public class BoardProductController {
     @Autowired
     private PageVO pageVO;
@@ -35,7 +35,7 @@ public class BoardProductController {
 	private BoardProductService boardService;
 	
 	@Autowired
-	private BoardCommService boardCommService;
+	private BoardProductCommService boardCommService;
 	
 	@Value("${spring.servlet.multipart.location}")
 	private String filePath;

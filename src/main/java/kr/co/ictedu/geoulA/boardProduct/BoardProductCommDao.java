@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import kr.co.ictedu.geoulA.vo.BoardSkinCommVO;
 
 @Mapper
-public interface Board_CommDao {
+public interface BoardProductCommDao {
 
 	void addComm(BoardSkinCommVO comm);
 

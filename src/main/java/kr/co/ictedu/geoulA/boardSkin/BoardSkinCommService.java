@@ -1,4 +1,4 @@
-package kr.co.ictedu.geoulA.boardProduct;
+package kr.co.ictedu.geoulA.boardSkin;
 
 import java.util.List;
 import java.util.Map;
@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.ictedu.geoulA.vo.BoardSkinCommVO;
 
 @Service
-public class BoardCommService {
+public class BoardSkinCommService {
 	@Autowired
-	private Board_CommDao boardCommDao;
+	private BoardSkinCommDao boardCommDao;
 	
 	@Transactional
 	public void add (BoardSkinCommVO vo) {

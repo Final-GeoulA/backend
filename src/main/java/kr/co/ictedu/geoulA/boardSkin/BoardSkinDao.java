@@ -1,4 +1,4 @@
-package kr.co.ictedu.geoulA.board;
+package kr.co.ictedu.geoulA.boardSkin;
 
 import java.util.List;
 import java.util.Map;
@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import kr.co.ictedu.geoulA.vo.BoardSkinVO;
 
 @Mapper
-public interface BoardDao {
+public interface BoardSkinDao {
 	void add (BoardSkinVO vo);
 	List<BoardSkinVO> blist(Map<String, Object> map);
 	

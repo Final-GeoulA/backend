@@ -34,6 +34,7 @@ public class LoginController {
 	        if (cnt == 1) {
 	            vo.setEmail(result.get("EMAIL").toString());
 	            vo.setPassword(result.get("PASSWORD").toString());
+	            vo.setNickname(result.get("NICKNAME").toString());
 	            session.setAttribute("loginMember", vo);
 	            return "success";
 	        }

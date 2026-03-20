@@ -1,4 +1,4 @@
-package kr.co.ictedu.geoulA.board;
+package kr.co.ictedu.geoulA.boardSkin;
 
 import java.util.List;
 import java.util.Map;
@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import kr.co.ictedu.geoulA.vo.BoardSkinCommVO;
 
 @Mapper
-public interface Board_CommDao {
+public interface BoardSkinCommDao {
 
 	void addComm(BoardSkinCommVO comm);
 

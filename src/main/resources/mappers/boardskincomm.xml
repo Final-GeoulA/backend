@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.ictedu.geoulA.board.Board_CommDao">
+<mapper namespace="kr.co.ictedu.geoulA.boardSkin.BoardSkinCommDao">
 
 <insert id="addComm" parameterType="bcommvo" >
 insert into board_skin_comm values(seq_board_skin_comm.nextVal, #{board_skin_id},#{unickname},#{ucontent},0,#{reip},sysdate)
