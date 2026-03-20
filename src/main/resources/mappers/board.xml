@@ -5,13 +5,13 @@
 
 <mapper namespace="kr.co.ictedu.geoulA.board.BoardDao">
 <insert id="add" parameterType="boardvo">
-	insert into board_skin values(SEQ_BOARD_SKIN.nextVal,#{title},#{writer},#{content},#{imgn},0,0,#{reip},sysdate)
+	insert into board_skin values(SEQ_BOARD_SKIN.nextVal,#{title},#{writer},#{content},#{imgn},0,0,#{reip},sysdate,0)
 </insert>
 
 <select id="blist" resultType="boardvo" parameterType="map">
-SELECT num, title, writer,content,hit,elike,reip,bdate,imgn,row_num FROM (
-SELECT num, title, writer,content,hit,elike,reip,bdate,imgn, ROW_NUMBER() 
-OVER(ORDER BY num desc) AS row_num FROM board_skin 
+SELECT BOARD_SKIN_ID, title, NICKNAME,content,hit,elike,reip,bdate,imgn,row_num FROM (
+SELECT BOARD_SKIN_ID, title, NICKNAME,content,hit,elike,reip,bdate,imgn, ROW_NUMBER()
+OVER(ORDER BY BOARD_SKIN_ID desc) AS row_num FROM board_skin
 		<where>
             <if test="mypage == 'true'">
                 AND member_num = #{num}
@@ -19,7 +19,7 @@ OVER(ORDER BY num desc) AS row_num FROM board_skin
             <if test="searchType != null and searchValue != null and searchValue != ''">
                 <choose>
                     <when test="searchType == 1">
-                        AND writer LIKE '%' || #{searchValue} || '%'
+                        AND NICKNAME LIKE '%' || #{searchValue} || '%'
                     </when>
                     <when test="searchType == 2">
                         AND title LIKE '%' || #{searchValue} || '%'
@@ -55,15 +55,15 @@ OVER(ORDER BY num desc) AS row_num FROM board_skin
         	</where>
 	</select>
 <update id="hit" parameterType="int">
-update board_skin set hit=hit+1 where num=#{num}
+update board_skin set hit=hit+1 where board_skin_id=#{num}
 </update>
 <update id="elike" parameterType="int">
 update board_skin set elike=elike+1 where num=#{num}
 </update>
 <select id="detail" parameterType="int">
-select * from board_skin where num=#{num}
+select * from board_skin where board_skin_id=#{num}
 </select>
 <delete id="delete" parameterType="int">
-delete from board_skin where num=#{num}
+delete from board_skin where board_skin_id=#{num}
 </delete>
 </mapper>

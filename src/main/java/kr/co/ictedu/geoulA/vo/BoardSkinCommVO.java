@@ -8,11 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Alias("bcommvo")
-public class Board_CommVO {
-//	private int comm_num;
-	private int ucode;
-	private String uwriter;
-//	private int member_num;
+public class BoardSkinCommVO {
+	private int board_skin_comm_id;
+	private int board_skin_id;
+	private String unickname;
 	private String ucontent;
 	private int elike;
 	private String reip;

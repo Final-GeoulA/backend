@@ -6,16 +6,16 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import kr.co.ictedu.geoulA.vo.Board_CommVO;
+import kr.co.ictedu.geoulA.vo.BoardSkinCommVO;
 
 @Mapper
 public interface Board_CommDao {
 
-	void addComm(Board_CommVO comm);
+	void addComm(BoardSkinCommVO comm);
 
-	void delcomm(int num);
+	void delcomm(int board_skin_comm_id);
 
-	List<Board_CommVO> listComm(Map<String, String> map);
+	List<BoardSkinCommVO> listComm(Map<String, String> map);
 
 	int totalCount(Map<String, String> map);
 

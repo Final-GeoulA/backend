@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.co.ictedu.geoulA.vo.Board_CommVO;
+import kr.co.ictedu.geoulA.vo.BoardSkinCommVO;
 
 @Service
 public class BoardCommService {
@@ -15,12 +15,12 @@ public class BoardCommService {
 	private Board_CommDao boardCommDao;
 	
 	@Transactional
-	public void add (Board_CommVO vo) {
+	public void add (BoardSkinCommVO vo) {
 		boardCommDao.addComm(vo);
-//		boardCommDao.plusComm(vo.getBoard_num());
+		boardCommDao.plusComm(vo.getBoard_skin_id());
 	}
 	
-	public List<Board_CommVO> listComm(Map<String, String> map) {
+	public List<BoardSkinCommVO> listComm(Map<String, String> map) {
 		return boardCommDao.listComm(map);
 	}
 	
@@ -29,8 +29,8 @@ public class BoardCommService {
 	}
 	
 	@Transactional
-	public void del (Board_CommVO num) {
-//		boardCommDao.delcomm(num);
-//		boardCommDao.minusComm(vo.getBoard_num());
+	public void del (BoardSkinCommVO vo) {
+		boardCommDao.delcomm(vo.getBoard_skin_comm_id());
+		boardCommDao.minusComm(vo.getBoard_skin_id());
 	}
 }

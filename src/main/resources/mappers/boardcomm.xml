@@ -4,34 +4,36 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.ictedu.geoulA.board.Board_CommDao">
+
 <insert id="addComm" parameterType="bcommvo" >
-insert into board_comm values(board_comm_seq.nextVal, #{ucode},#{uwriter},#{uontent},0,#{reip},sysdate)
+insert into board_skin_comm values(seq_board_skin_comm.nextVal, #{board_skin_id},#{unickname},#{ucontent},0,#{reip},sysdate)
 </insert>
 
 <select id="listComm" resultType="bcommvo" parameterType="map" >
-SELECT num, ucode,uwriter,ucontent,reip,bcdate, row_num FROM (
-SELECT num, ucode,uwriter,ucontent,reip,bcdate, ROW_NUMBER() 
-OVER(ORDER BY ucode desc) AS row_num FROM BOARD_skin_comm where ucode=#{num}
+SELECT Board_SKIN_COMM_ID, BOARD_SKIN_ID,unickname,ucontent,reip,bcdate, row_num FROM (
+SELECT Board_SKIN_COMM_ID, BOARD_SKIN_ID,unickname,ucontent,reip,bcdate, ROW_NUMBER()
+OVER(ORDER BY BOARD_SKIN_COMM_ID desc) AS row_num FROM Board_SKIN_COMM where BOARD_SKIN_ID=#{num}
 ) numbered_rows WHERE row_num BETWEEN #{begin} AND #{end} 
-</select> 
+</select>
+
 <delete id="delcomm" parameterType="int">
-DELETE FROM BOARD_skin_comm WHERE comm_num=#{num}
+DELETE FROM BOARD_skin_comm WHERE Board_SKIN_COMM_ID=#{board_skin_comm_id}
 </delete>
 
 <select id="totalCount" resultType="int" parameterType="map">
-select count(*) cnt from board_skin_comm where board_num=#{board_num}
+select count(*) cnt from board_skin_comm where board_skin_id=#{num}
 </select>
 
 <update id="plusComm">
-    UPDATE BOARD 
+    UPDATE BOARD_SKIN
     SET comm_count = comm_count + 1 
-    WHERE num = #{num}
+    WHERE board_skin_id = #{num}
 </update>
 
 <update id="minusComm">
-    UPDATE BOARD 
+    UPDATE BOARD_SKIN
     SET comm_count = comm_count - 1 
-    WHERE num = #{num}
+    WHERE board_skin_id = #{num}
 </update>
 
 </mapper>

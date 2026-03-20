@@ -1,0 +1,62 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="kr.co.ictedu.geoulA.hospital.HospitalDao">
+
+    <!-- 카카오 placeId로 기존 병원 조회 -->
+	<select id="findByPlaceId" resultType="kr.co.ictedu.geoulA.vo.HospitalVO">
+	    SELECT
+	        HOSPITAL_ID AS hospitalId,
+	        PLACE_ID AS placeId,
+	        NAME AS name,
+	        ADDRESS AS address,
+	        LAT AS lat,
+	        LON AS lon
+	    FROM HOSPITAL
+	    WHERE PLACE_ID = #{placeId}
+	</select>
+
+    <!-- 병원 정보 저장 -->
+    <insert id="insertHospital" parameterType="kr.co.ictedu.geoulA.vo.HospitalVO">
+        <selectKey keyProperty="hospitalId" resultType="int" order="BEFORE">
+            SELECT SEQ_HOSPITAL.NEXTVAL FROM DUAL
+        </selectKey>
+
+        INSERT INTO HOSPITAL
+            (HOSPITAL_ID, PLACE_ID, NAME, ADDRESS, LAT, LON)
+        VALUES
+            (#{hospitalId}, #{placeId}, #{name}, #{address}, #{lat}, #{lon})
+    </insert>
+
+    <!-- 유저가 병원 저장 -->
+    <insert id="insertHospitalSave">
+        INSERT INTO HOSPITAL_SAVE
+            (HOSPITAL_SAVE_ID, HOSPITAL_ID, USER_ID)
+        VALUES
+            (SEQ_HOSPITAL_SAVE.NEXTVAL, #{hospitalId}, #{userId})
+    </insert>
+
+	<!-- 병원 저장 취소 -->
+	<delete id="deleteHospitalSave">
+	    DELETE FROM HOSPITAL_SAVE
+	    WHERE HOSPITAL_ID = #{hospitalId}
+	      AND USER_ID = #{userId}
+	</delete>
+	
+	<!-- 특정 유저가 북마크한 병원 목록 조회 -->
+	<select id="findSavedHospitalsByUserId" resultType="kr.co.ictedu.geoulA.vo.HospitalVO">
+	    SELECT
+	        H.HOSPITAL_ID AS hospitalId,
+	        H.PLACE_ID AS placeId,
+	        H.NAME AS name,
+	        H.ADDRESS AS address,
+	        H.LAT AS lat,
+	        H.LON AS lon
+	    FROM HOSPITAL_SAVE HS
+	    JOIN HOSPITAL H
+	      ON HS.HOSPITAL_ID = H.HOSPITAL_ID
+	    WHERE HS.USER_ID = #{userId}
+	</select>
+
+</mapper>
