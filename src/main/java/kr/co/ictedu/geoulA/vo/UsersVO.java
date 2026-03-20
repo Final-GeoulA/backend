@@ -14,8 +14,8 @@ public class UsersVO {
 	private String email; // 이메일
 	private String password; //비밀번호
 	private String nickname; // 별명
-	private int age; // 나이
-	private int skin_type; // 피부타입
+	private String age; // 나이
+	private String skin_type; // 피부타입
 	private int user_coin; // 유저코인
-	private int gender;
+	private String gender;
 }

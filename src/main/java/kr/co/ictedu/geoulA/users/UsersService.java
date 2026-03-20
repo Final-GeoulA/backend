@@ -17,4 +17,5 @@ public class UsersService {
 	public int checkEmail(String mail) {
 		return usersDao.countByEmail(mail);
 	}
+	
 }
