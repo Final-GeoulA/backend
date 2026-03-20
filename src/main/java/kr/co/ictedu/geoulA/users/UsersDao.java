@@ -14,5 +14,5 @@ public interface UsersDao {
 	int countByEmail(String email);// 이메일 중복 체크 count로 반환
 	
 	String useCheckEmail(String email);
-
+	
 }
