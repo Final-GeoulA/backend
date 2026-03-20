@@ -1,4 +1,4 @@
-package kr.co.ictedu.geoulA.board;
+package kr.co.ictedu.geoulA.boardSkin;
 
 import java.util.List;
 import java.util.Map;
@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import kr.co.ictedu.geoulA.vo.BoardSkinVO;
 
 @Service
-public class BoardService {
+public class BoardSkinService {
 	@Autowired
-	private BoardDao boardDao;
+	private BoardSkinDao boardDao;
 	
 	public void add (BoardSkinVO vo) {
 		boardDao.add(vo);

@@ -1,4 +1,4 @@
-package kr.co.ictedu.geoulA.board;
+package kr.co.ictedu.geoulA.boardSkin;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,16 +26,16 @@ import kr.co.ictedu.geoulA.vo.PageVO;
 
 
 @RestController
-@RequestMapping("/board")
-public class BoardController {
+@RequestMapping("/board/skin")
+public class BoardSkinController {
     @Autowired
     private PageVO pageVO;
     
 	@Autowired
-	private BoardService boardService;
+	private BoardSkinService boardService;
 	
 	@Autowired
-	private BoardCommService boardCommService;
+	private BoardSkinCommService boardCommService;
 	
 	@Value("${spring.servlet.multipart.location}")
 	private String filePath;
