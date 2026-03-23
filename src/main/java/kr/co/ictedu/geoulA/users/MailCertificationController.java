@@ -22,29 +22,17 @@ public class MailCertificationController {
 	//최종적으로 해당 이메일이 중복이 아니면 0으로 반환 중복이면 1로 반환 
 	@PostMapping("/emailCheck")
 	public int sendEmail(@RequestBody EmailCheckVO email) {
-		System.out.println("이메일요청됨:"+email.getEmail());
+		
 		int checkEmail = emailSenderService.duplicateEmail(email.getEmail());
 		if(checkEmail == 0) {
 			emailSenderService.sendEmail(email.getEmail());
+			System.out.println("이메일이 요청 되었습니다.:"+email.getEmail());
 			return 0;
 		}else {
+			System.out.println("사용중인 이메일 입니다.:"+email.getEmail());
 			return 1;
 		}
 	}
-	//이메일이 있으면
-	@PostMapping("/useEmailCheck")
-	public int useEmail(@RequestBody EmailCheckVO email) {
-		System.out.println("이메일요청됨22:"+email.getEmail());
-		String checkEmail = emailSenderService.useEmailCheck(email.getEmail());
-		System.out.println(checkEmail);
-		if(checkEmail != null) {
-			emailSenderService.sendEmail(email.getEmail());
-			return 1;
-		}else {
-			return 0;
-		}
-	}
-	
 	
 	//최종적으로 해당 이메일에 대한 인증코드가 생성됐으면 그 이메일에 대한 시도횟수,성공,실패를 위한 설정 
 	@PostMapping("/emailCheck/certification")
