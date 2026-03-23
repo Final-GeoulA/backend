@@ -9,11 +9,9 @@ import kr.co.ictedu.geoulA.vo.UsersVO;
 
 @Mapper
 public interface LoginPwlDao {
-	
-	@Select("SELECT userid, email, nickname, 1 CNT FROM users WHERE email=#{email} AND PASSWORD = #{password}")
-	Map<String, Object> loginCheck(UsersVO vo);
-	
 	// ----- PASSWORDLESS -----
+	@Select("SELECT email, password FROM USERS WHERE email=#{email} AND PASSWORD = #{password}")
+	Map<String, Object> loginCheck(UsersVO vo);
 	
 	// 이용자 정보 확인
 	UsersVO getUserInfo(UsersVO vo);   
