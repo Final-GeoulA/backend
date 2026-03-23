@@ -31,10 +31,6 @@ public class EmailSenderService {
 		int checkEmail = usersDao.countByEmail(email);
 		return checkEmail > 0 ? 1 : 0;
 	}
-	public String useEmailCheck(String email) {
-		String checkEmail = usersDao.useCheckEmail(email);
-		return checkEmail;
-	}
 	//무작위의 6자리 난수를 만드는 메서드 
 	public void createAuthCode() {
 		int length = 6;
