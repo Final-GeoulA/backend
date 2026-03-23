@@ -79,13 +79,13 @@ public class LoginPwlController {
 	private String recommend;
 	
 	// Passwordless URL
-		private String isApUrl = "/ap/rest/auth/isAp";									// Check Passwordless Registration Status
-		private String joinApUrl = "/ap/rest/auth/joinAp";								// Passwordless Registration REST API
-		private String withdrawalApUrl = "/ap/rest/auth/withdrawalAp";					// Passwordless Deregistration REST API
-		private String getTokenForOneTimeUrl = "/ap/rest/auth/getTokenForOneTime";		// Passwordless One-Time Token Request REST API
-		private String getSpUrl = "/ap/rest/auth/getSp";								// Passwordless Authentication Request REST API
-		private String resultUrl = "/ap/rest/auth/result";								// Passwordless Authentication Result Request REST API
-		private String cancelUrl = "/ap/rest/auth/cancel";
+	private String isApUrl = "/ap/rest/auth/isAp";									// Check Passwordless Registration Status
+	private String joinApUrl = "/ap/rest/auth/joinAp";								// Passwordless Registration REST API
+	private String withdrawalApUrl = "/ap/rest/auth/withdrawalAp";					// Passwordless Deregistration REST API
+	private String getTokenForOneTimeUrl = "/ap/rest/auth/getTokenForOneTime";		// Passwordless One-Time Token Request REST API
+	private String getSpUrl = "/ap/rest/auth/getSp";								// Passwordless Authentication Request REST API
+	private String resultUrl = "/ap/rest/auth/result";								// Passwordless Authentication Result Request REST API
+	private String cancelUrl = "/ap/rest/auth/cancel";
 
 
 	@GetMapping("/sessionpwl")
@@ -106,11 +106,15 @@ public class LoginPwlController {
 	// Login
 	@PostMapping(value="/passwordlessManageCheck", produces="application/json;charset=utf8")
 	public Map<String, Object> passwordlessManageCheck(
-	        @RequestParam(value = "email", required = false) String email,
-	        HttpServletRequest request, @RequestBody UsersVO vo) {
-
+//	        @RequestParam(value = "email", required = false) String email,
+//	        @RequestParam(value = "password", required = false) String password,
+	        HttpServletRequest request,
+	        @RequestBody UsersVO vo
+	        ) {
+		
 	    Map<String, Object> mapResult = new HashMap<>();
-
+	    String email = vo.getEmail();
+	    
 	    // 1. ID가 없는 경우
 	    if(email == null || email.isEmpty()) {
 	        mapResult.put("result", messageUtils.getMessage("text.passwordless.empty")); // "ID is empty"
@@ -233,7 +237,7 @@ public class LoginPwlController {
 			if(url.equals("joinApUrl"))				{ apiUrl = joinApUrl; }
 			if(url.equals("withdrawalApUrl"))		{ apiUrl = withdrawalApUrl; }
 			if(url.equals("getTokenForOneTimeUrl"))	{ apiUrl = getTokenForOneTimeUrl; }
-			if(url.equals("getSpUrl"))				{ apiUrl = getSpUrl; params += "&clientIp=" + ip + "&sessionId=" + sessionId + "&random=" + random + "&password="; }
+			if(url.equals("getSpUrl"))				{ apiUrl = getSpUrl; params += "&clientip=" + ip + "&sessionId=" + sessionId + "&random=" + random+ "&password="; }
 			if(url.equals("resultUrl"))				{ apiUrl = resultUrl;}
 			if(url.equals("cancelUrl"))				{ apiUrl = cancelUrl;}
 			
@@ -253,9 +257,9 @@ public class LoginPwlController {
 				}
 			}
 			
-			if(!url.equals("getSpUrl") && !url.equals("resultUrl")) {
+			// if(!url.equals("getSpUrl") && !url.equals("resultUrl")) {
 				log.info("passwordlessCallApi : result [" + result + "]");
-			}
+			// }
 
 			// One-Time Token Request
 			if(url.equals("getTokenForOneTimeUrl")) {
