@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @Alias("boardvo")
 public class BoardSkinVO {
-	private int num;
+	private int board_skin_id;
 	private String title;
 	private String writer;
 //	private int member_num;

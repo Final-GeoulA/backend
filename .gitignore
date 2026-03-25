@@ -37,3 +37,22 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### macOS ###
+.DS_Store
+
+### Windows ###
+Thumbs.db
+desktop.ini
+
+### Logs ###
+*.log
+
+### Sensitive Config ###
+src/main/resources/properties/config.properties
+
+### Uploaded Files ###
+src/main/resources/static/imagefile/
+
+### Claude Code ###
+.claude/

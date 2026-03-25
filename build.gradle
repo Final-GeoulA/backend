@@ -25,21 +25,20 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'// email 인증 관련
-	implementation 'org.springframework.boot:spring-boot-starter-mail' // email 인증 관련
-	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-aop'
-	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.5'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	implementation 'org.apache.httpcomponents:httpclient:4.5.1'
-	implementation files('libs/java-jwt-3.18.3.jar')
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'// email 인증 관련
+    implementation 'org.springframework.boot:spring-boot-starter-mail' // email 인증 관련
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.1'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.5'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {

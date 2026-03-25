@@ -9,9 +9,9 @@
 </insert>
 
 <select id="blist" resultType="boardvo" parameterType="map">
-SELECT BOARD_SKIN_ID, title, NICKNAME,content,hit,elike,reip,bdate,imgn,row_num FROM (
-SELECT BOARD_SKIN_ID, title, NICKNAME,content,hit,elike,reip,bdate,imgn, ROW_NUMBER()
-OVER(ORDER BY BOARD_SKIN_ID desc) AS row_num FROM board_skin
+SELECT board_skin_id, title, NICKNAME,content,hit,elike,reip,bdate,imgn,row_num FROM (
+SELECT board_skin_id, title, NICKNAME,content,hit,elike,reip,bdate,imgn, ROW_NUMBER()
+OVER(ORDER BY board_skin_id desc) AS row_num FROM board_skin
 		<where>
             <if test="mypage == 'true'">
                 AND member_num = #{num}
@@ -58,12 +58,14 @@ OVER(ORDER BY BOARD_SKIN_ID desc) AS row_num FROM board_skin
 update board_skin set hit=hit+1 where board_skin_id=#{num}
 </update>
 <update id="elike" parameterType="int">
-update board_skin set elike=elike+1 where num=#{num}
+update board_skin set elike=elike+1 where board_skin_id=#{num}
 </update>
-<select id="detail" parameterType="int">
-select * from board_skin where board_skin_id=#{num}
-</select>
-<delete id="delete" parameterType="int">
+    <select id="detail" parameterType="int" resultType="boardvo">
+        SELECT BOARD_SKIN_ID as board_skin_id, title, NICKNAME as writer,
+        content, imgn, hit, elike, reip, bdate
+        FROM board_skin WHERE board_skin_id=#{num}
+    </select>
+    <delete id="delete" parameterType="int">
 delete from board_skin where board_skin_id=#{num}
 </delete>
 </mapper>
