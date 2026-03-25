@@ -13,7 +13,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 # 테스트
 ./gradlew test
-
 # 단일 테스트 실행
 ./gradlew test --tests "kr.co.ictedu.geoulA.ClassName.methodName"
 ```
