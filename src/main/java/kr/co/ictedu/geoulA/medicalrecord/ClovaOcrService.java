@@ -134,6 +134,7 @@ public class ClovaOcrService {
         return result;
     }
 
+    // ==== 병원명 추출 ====
     private String extractHospitalName(String rawText) {
         if (rawText == null || rawText.isBlank()) {
             return "";
@@ -161,7 +162,7 @@ public class ClovaOcrService {
         return lines.length > 0 ? lines[0].trim() : "";
     }
 
-    // 날짜 추출
+    // ==== 날짜 추출 ====
     private String extractPaymentDate(String rawText) {
         if (rawText == null || rawText.isBlank()) {
             return "";
@@ -180,34 +181,68 @@ public class ClovaOcrService {
         return "";
     }
 
+    // ==== 가격 추출 ====
     private Integer extractPrice(String rawText) {
         if (rawText == null || rawText.isBlank()) {
             return 0;
         }
 
-        Pattern sumPattern = Pattern.compile("(합계|총액|계)\\s*[:]?\\s*[₩￦]?[\\s]*([0-9,]+)");
-        Matcher sumMatcher = sumPattern.matcher(rawText);
-
-        if (sumMatcher.find()) {
-            String priceText = sumMatcher.group(2).replace(",", "").trim();
-            try {
-                return Integer.parseInt(priceText);
-            } catch (Exception e) {
-            }
-        }
-
-        Pattern pricePattern = Pattern.compile("[₩￦]?\\s*([0-9]{1,3}(?:,[0-9]{3})+|[0-9]{4,})");
-        Matcher priceMatcher = pricePattern.matcher(rawText);
+        String[] lines = rawText.split("\\r?\\n");
 
         int maxPrice = 0;
-        while (priceMatcher.find()) {
-            String priceText = priceMatcher.group(1).replace(",", "").trim();
-            try {
-                int value = Integer.parseInt(priceText);
-                if (value > maxPrice) {
-                    maxPrice = value;
+
+        for (String line : lines) {
+            String trimmed = line.trim();
+
+            if (trimmed.isEmpty()) continue;
+
+            // 번호/날짜 관련 줄은 통째로 제외
+            if (trimmed.contains("사업자등록번호")) continue;
+            if (trimmed.contains("전화번호")) continue;
+            if (trimmed.contains("대표번호")) continue;
+            if (trimmed.contains("승인번호")) continue;
+            if (trimmed.contains("카드번호")) continue;
+            if (trimmed.contains("날짜")) continue;
+
+            // 하이픈 포함 줄은 번호일 가능성이 높아서 제외
+            if (trimmed.contains("-")) continue;
+
+            // 1순위: 합계/총액/금액/결제금액 같은 줄
+            if (trimmed.contains("합계") || trimmed.contains("총액") || trimmed.contains("금액") || trimmed.contains("결제")) {
+                Matcher strongMatcher = Pattern.compile("([0-9]{1,3}(?:,[0-9]{3})+|[0-9]{4,})").matcher(trimmed);
+                while (strongMatcher.find()) {
+                    String num = strongMatcher.group(1).replace(",", "");
+                    try {
+                        return Integer.parseInt(num);
+                    } catch (Exception e) {
+                    }
                 }
-            } catch (Exception e) {
+            }
+
+            // 2순위: '원' 붙은 숫자
+            Matcher wonMatcher = Pattern.compile("([0-9]{1,3}(?:,[0-9]{3})+|[0-9]{4,})\\s*원").matcher(trimmed);
+            while (wonMatcher.find()) {
+                String num = wonMatcher.group(1).replace(",", "");
+                try {
+                    int value = Integer.parseInt(num);
+                    if (value > maxPrice) {
+                        maxPrice = value;
+                    }
+                } catch (Exception e) {
+                }
+            }
+
+            // 3순위: 일반 숫자 중 큰 값
+            Matcher normalMatcher = Pattern.compile("([0-9]{1,3}(?:,[0-9]{3})+|[0-9]{4,})").matcher(trimmed);
+            while (normalMatcher.find()) {
+                String num = normalMatcher.group(1).replace(",", "");
+                try {
+                    int value = Integer.parseInt(num);
+                    if (value > maxPrice) {
+                        maxPrice = value;
+                    }
+                } catch (Exception e) {
+                }
             }
         }
 
