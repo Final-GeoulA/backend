@@ -16,6 +16,5 @@ public class UsersVO {
 	private String nickname; // 별명
 	private String age; // 나이
 	private String skin_type; // 피부타입
-	private int user_coin; // 유저코인
-	private String gender;
+    private String gender;
 }
