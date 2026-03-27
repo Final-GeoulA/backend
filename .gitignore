@@ -56,3 +56,7 @@ src/main/resources/static/imagefile/
 
 ### Claude Code ###
 .claude/
+
+### Excluded Source Files ###
+build.gradle
+src/main/java/kr/co/ictedu/geoulA/GeoulAApplication.java
