@@ -5,21 +5,22 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.http.MediaType;
 
+import jakarta.servlet.http.HttpSession;
 import kr.co.ictedu.geoulA.vo.MedicalRecordVO;
+import kr.co.ictedu.geoulA.vo.UsersVO;
 
 @RestController
 @RequestMapping("/api/medical-record")
-@CrossOrigin(origins = "http://localhost:3000") // 도메인 허용
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class MedicalRecordController {
 	
     @Autowired
@@ -29,8 +30,18 @@ public class MedicalRecordController {
     private ClovaOcrService clovaOcrService;
     
     @PostMapping("/save")
-    public Map<String, Object> saveMedicalRecord(@RequestBody MedicalRecordVO vo) {
+    public Map<String, Object> saveMedicalRecord(@RequestBody MedicalRecordVO vo, HttpSession session) {
         Map<String, Object> result = new HashMap<>();
+
+        UsersVO loginMember = (UsersVO) session.getAttribute("loginMember");
+
+        if (loginMember == null) {
+            result.put("success", false);
+            result.put("message", "로그인이 필요합니다.");
+            return result;
+        }
+
+        vo.setUserId(Long.valueOf(loginMember.getUser_id()));
 
         int cnt = medicalRecordService.insertMedicalRecord(vo);
 
@@ -41,19 +52,24 @@ public class MedicalRecordController {
     }
 
     @GetMapping("/list")
-    public List<MedicalRecordVO> getMedicalRecordList(@RequestParam("userId") Long userId) {
-        return medicalRecordService.selectMedicalRecordList(userId);
+    public Object getMedicalRecordList(HttpSession session) {
+        UsersVO loginMember = (UsersVO) session.getAttribute("loginMember");
+
+        if (loginMember == null) {
+            Map<String, Object> result = new HashMap<>();
+            result.put("success", false);
+            result.put("message", "로그인이 필요합니다.");
+            return result;
+        }
+
+        return medicalRecordService.selectMedicalRecordList((long) loginMember.getUser_id());
     }
 
     @PostMapping(value = "/ocr", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Map<String, Object> ocrTest(@RequestParam("file") MultipartFile file) {
+    public Map<String, Object> ocrTest(@org.springframework.web.bind.annotation.RequestParam("file") MultipartFile file) {
         Map<String, Object> result = new HashMap<>();
 
         try {
-            System.out.println("=== 컨트롤러 진입 ===");
-            System.out.println("파일명: " + file.getOriginalFilename());
-            System.out.println("파일크기: " + file.getSize());
-
             String ocrJson = clovaOcrService.callOcr(file);
             OcrParsedResult parsed = clovaOcrService.parseOcrResult(ocrJson);
 

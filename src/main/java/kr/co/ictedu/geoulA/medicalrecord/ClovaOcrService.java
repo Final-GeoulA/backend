@@ -40,11 +40,6 @@ public class ClovaOcrService {
             format = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
         }
 
-        System.out.println("=== OCR 요청 시작 ===");
-        System.out.println("invokeUrl = " + invokeUrl + "/general");
-        System.out.println("fileName = " + originalFileName);
-        System.out.println("format = " + format);
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         headers.set("X-OCR-SECRET", secretKey);
@@ -62,8 +57,6 @@ public class ClovaOcrService {
         images.put(image);
 
         message.put("images", images);
-
-        System.out.println("message = " + message.toString());
 
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("message", message.toString());
@@ -87,9 +80,6 @@ public class ClovaOcrService {
                     requestEntity,
                     String.class
             );
-
-            System.out.println("=== OCR 응답 성공 ===");
-            System.out.println(response.getBody());
 
             return response.getBody();
         } catch (HttpClientErrorException e) {
@@ -207,7 +197,7 @@ public class ClovaOcrService {
             // 하이픈 포함 줄은 번호일 가능성이 높아서 제외
             if (trimmed.contains("-")) continue;
 
-            // 1순위: 합계/총액/금액/결제금액 같은 줄
+            // 1순위: 합계, 총액, 금액, 
             if (trimmed.contains("합계") || trimmed.contains("총액") || trimmed.contains("금액") || trimmed.contains("결제")) {
                 Matcher strongMatcher = Pattern.compile("([0-9]{1,3}(?:,[0-9]{3})+|[0-9]{4,})").matcher(trimmed);
                 while (strongMatcher.find()) {
