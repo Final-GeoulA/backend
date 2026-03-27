@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding ="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.ictedu.geoulA.product.ProductCommDao">
+	<select id="totalCount" resultType="int" parameterType="int">
+		select count(*) from PRODUCT_COMM where PRODUCT_ID=#{prodid}
+	</select>
+	
+	<select id="listComm" resultType="prdcommvo" parameterType="map" >
+	SELECT PRODUCT_COMM_ID, PRODUCT_ID,USER_ID,CONTENT,ELIKE,reip,bcdate,USER_NAME, row_num FROM (
+	SELECT PRODUCT_COMM_ID, PRODUCT_ID,USER_ID,CONTENT,ELIKE,reip,bcdate,USER_NAME, ROW_NUMBER()
+	OVER(ORDER BY PRODUCT_COMM_ID desc) AS row_num FROM PRODUCT_COMM where PRODUCT_ID=#{prodid}
+	) WHERE row_num BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<insert id="addComm" parameterType="prdcommvo" >
+		insert into PRODUCT_COMM values(SEQ_BOARD_RECOMMEND_COMM.nextVal, #{PRODUCT_ID},#{user_id},#{content},0,#{reip},sysdate)
+	</insert>
+
+	<delete id="delComm" parameterType="int">
+		delete from PRODUCT_COMM WHERE PRODUCT_COMM_ID=#{product_comm_id}
+	</delete>
+</mapper>

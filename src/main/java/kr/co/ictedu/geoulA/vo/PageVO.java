@@ -22,8 +22,7 @@ public class PageVO {
 	public PageVO() {		//기본 생성자에서 페이징 처리에 기본 값을 초기화
 		this.nowPage=1;
 		this.nowBlock=1;
-		this.numPerPage=10;
+		this.numPerPage=15;
 		this.pagePerBlock=5;
-		System.out.println("페이지 처리 객체가 생성되었습니다!");
 	}
 }
