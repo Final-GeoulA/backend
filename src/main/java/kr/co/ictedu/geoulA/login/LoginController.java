@@ -26,15 +26,20 @@ public class LoginController {
 	private LoginDao loginDao;
 	
 	@PostMapping("/dologin")
-	public String doLogin(HttpSession session, @RequestBody UsersVO vo) {
+	public String doLogin(HttpSession session, HttpServletRequest request, @RequestBody UsersVO vo) {
 	    Map<String, Object> result = loginService.loginCheck(vo);
 
 	    if (result != null && result.get("CNT") != null) {
 	        int cnt = ((Number) result.get("CNT")).intValue();
 	        if (cnt == 1) {
+              vo.setUser_id(((Number) result.get("USER_ID")).intValue());
+	            vo.setUser_grade_id(((Number) result.get("USER_GRADE_ID")).intValue());
 	            vo.setEmail(result.get("EMAIL").toString());
 	            vo.setPassword(result.get("PASSWORD").toString());
 	            vo.setNickname(result.get("NICKNAME").toString());
+	            vo.setAge(result.get("AGE").toString());
+	            vo.setSkin_type(result.get("SKIN_TYPE").toString());
+	            vo.setGender(result.get("GENDER").toString());
 	            session.setAttribute("loginMember", vo);
 	            return "success";
 	        }

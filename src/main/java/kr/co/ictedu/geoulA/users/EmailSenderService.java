@@ -31,10 +31,6 @@ public class EmailSenderService {
 		int checkEmail = usersDao.countByEmail(email);
 		return checkEmail > 0 ? 1 : 0;
 	}
-	public String useEmailCheck(String email) {
-		String checkEmail = usersDao.useCheckEmail(email);
-		return checkEmail;
-	}
 	//무작위의 6자리 난수를 만드는 메서드 
 	public void createAuthCode() {
 		int length = 6;
@@ -64,7 +60,7 @@ public class EmailSenderService {
 		 try {
 			MimeMessageHelper helper = new MimeMessageHelper(message,true);
 			System.out.println("toEmail = [" + toEmail + "]");
-			helper.setFrom("pyt19981@naver.com");
+			helper.setFrom("zhalrtjddn01@naver.com");
 			helper.setTo(toEmail);
 			helper.setSubject("GeoulA팀의 회원가입 인증번호 발송");
 			StringBuilder body = new StringBuilder();

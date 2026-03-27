@@ -12,7 +12,7 @@ insert into board_skin_comm values(seq_board_skin_comm.nextVal, #{board_skin_id}
 <select id="listComm" resultType="bcommvo" parameterType="map" >
 SELECT Board_SKIN_COMM_ID, BOARD_SKIN_ID,unickname,ucontent,reip,bcdate, row_num FROM (
 SELECT Board_SKIN_COMM_ID, BOARD_SKIN_ID,unickname,ucontent,reip,bcdate, ROW_NUMBER()
-OVER(ORDER BY BOARD_SKIN_COMM_ID desc) AS row_num FROM Board_SKIN_COMM where BOARD_SKIN_ID=#{num}
+OVER(ORDER BY BOARD_SKIN_COMM_ID desc) AS row_num FROM Board_SKIN_COMM where BOARD_SKIN_ID=#{board_skin_id}
 ) numbered_rows WHERE row_num BETWEEN #{begin} AND #{end} 
 </select>
 
@@ -21,19 +21,19 @@ DELETE FROM BOARD_skin_comm WHERE Board_SKIN_COMM_ID=#{board_skin_comm_id}
 </delete>
 
 <select id="totalCount" resultType="int" parameterType="map">
-select count(*) cnt from board_skin_comm where board_skin_id=#{num}
+select count(*) cnt from board_skin_comm where board_skin_id=#{board_skin_id}
 </select>
 
 <update id="plusComm">
     UPDATE BOARD_SKIN
     SET comm_count = comm_count + 1 
-    WHERE board_skin_id = #{num}
+    WHERE board_skin_id = #{board_skin_id}
 </update>
 
 <update id="minusComm">
     UPDATE BOARD_SKIN
     SET comm_count = comm_count - 1 
-    WHERE board_skin_id = #{num}
+    WHERE board_skin_id = #{board_skin_id}
 </update>
 
 </mapper>
