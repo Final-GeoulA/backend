@@ -1,4 +1,4 @@
-package kr.co.ictedu.geoulA.boardProduct;
+package kr.co.ictedu.geoulA.product;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,88 +20,61 @@ import org.springframework.web.multipart.MultipartFile;
 
 //import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.servlet.http.HttpServletRequest;
-import kr.co.ictedu.geoulA.vo.BoardSkinVO;
-import kr.co.ictedu.geoulA.vo.BoardSkinCommVO;
+import kr.co.ictedu.geoulA.passwordless.MessageUtils;
+import kr.co.ictedu.geoulA.vo.ProductCommVO;
 import kr.co.ictedu.geoulA.vo.PageVO;
+import kr.co.ictedu.geoulA.vo.ProductVO;
 
 
 @RestController
 @RequestMapping("/board/product")
-public class BoardProductController {
+public class ProductController {
+
+    private final MessageUtils messageUtils;
     @Autowired
     private PageVO pageVO;
     
 	@Autowired
-	private BoardProductService boardService;
+	private ProductService productService;
 	
 	@Autowired
-	private BoardProductCommService boardCommService;
+	private ProductCommService productCommService;
 	
 	@Value("${spring.servlet.multipart.location}")
 	private String filePath;
-	
-	@PostMapping("/add")
-	public ResponseEntity<?> addBoard(BoardSkinVO vo, HttpServletRequest req) {
-		vo.setReip(req.getRemoteAddr());
-		MultipartFile mf = vo.getMfile();
-		String oriFn =mf.getOriginalFilename();
-		System.out.println("파일이름: "+oriFn);
-		
-		StringBuilder path = new StringBuilder();
-		path.append(filePath).append("\\");
-		path.append(oriFn);
-		System.out.println("FullPath: "+ path);
-		File f = new File(path.toString());		
-		try {
-			mf.transferTo(f);   			
-			vo.setImgn(oriFn);
-			boardService.add(vo);
-			return ResponseEntity.ok().body("업로드 성공!");	
-		}catch (IllegalStateException |IOException e) {
-			e.printStackTrace();
-		}
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("업로드 실패");	
-	}
-	@GetMapping("/del")
-	public void DelBoard(@RequestParam("num") int num) {
-		boardService.del(num);
-	}
-	
-	@GetMapping("/detail")
-	public BoardSkinVO detail(@RequestParam("num") int num) {
-		return boardService.detail(num);		
-	}
-	
+
+    ProductController(MessageUtils messageUtils) {
+        this.messageUtils = messageUtils;
+    }
 	
 	@RequestMapping("/list")
-	public Map<String, Object> BoaradList(@RequestParam Map<String, String> paramMap, HttpServletRequest req){
+	public Map<String, Object> PList(@RequestParam Map<String, Object> paramMap, HttpServletRequest req){
 		pageVO.setNumPerPage(12);
-		String cPage = paramMap.get("cPage");
+		String cPage = (String) paramMap.get("cPage");
 
-//		int totalCnt = boardService.totalCount(paramMap);
-//		pageVO.setTotalRecord(totalCnt);
-//		
-//		int totalPage =(int)Math.ceil(totalCnt/ (double)pageVO.getNumPerPage());
-//		pageVO.setTotalPage(totalPage);
-//		
-//		int totalBlock=(int)Math.ceil(totalPage/(double)pageVO.getPagePerBlock());
-//		pageVO.setTotalBlock(totalBlock);
+		int totalCnt = productService.totalCount(paramMap);
+		pageVO.setTotalRecord(totalCnt);
+		
+		int totalPage =(int)Math.ceil(totalCnt/ (double)pageVO.getNumPerPage());
+		pageVO.setTotalPage(totalPage);
+		
+		int totalBlock=(int)Math.ceil(totalPage/(double)pageVO.getPagePerBlock());
+		pageVO.setTotalBlock(totalBlock);
 		
 		if(cPage !=null) {
 			pageVO.setNowPage(Integer.parseInt(cPage));
 		}else {
 			pageVO.setNowPage(1);
 		}
-		
-		pageVO.setBeginPerPage((pageVO.getNowPage()-1)*pageVO.getNumPerPage()+1);
-		pageVO.setEndPerPage(pageVO.getBeginPerPage()+pageVO.getNumPerPage()-1);
+		pageVO.setBeginPerPage((pageVO.getNowPage()-1)*pageVO.getNumPerPage()+1);	//(한 페이지에) 이 게시글부터
+		pageVO.setEndPerPage(pageVO.getBeginPerPage()+pageVO.getNumPerPage()-1);	//(한 페이지에) 이 게시글까지
 		
 	
 		Map<String, Object> response = new HashMap<>();
 		Map<String, Object> map =new HashMap<>(paramMap);
 		map.put("begin", String.valueOf(pageVO.getBeginPerPage()));
 		map.put("end", String.valueOf(pageVO.getEndPerPage()));
-		List<BoardSkinVO> list = boardService.blist(map);
+		List<ProductVO> list = productService.plist(map);
 
 		int startPage =(int)((pageVO.getNowPage()-1)/pageVO.getPagePerBlock())*pageVO.getPagePerBlock()+1;
 		int endPage=startPage+pageVO.getPagePerBlock()-1;
@@ -118,27 +91,43 @@ public class BoardProductController {
 		response.put("endPage", endPage);
 		return response;		
 	}
-	
+	@RequestMapping("/heart")
+	public ResponseEntity<?> heart(@RequestParam Map<String, Object> paramMap) {
+		productService.heart(paramMap);
+		productService.like((int) paramMap.get("prodid"));
+	    return ResponseEntity.ok().body("ok");
+	}
+	@RequestMapping("/unheart")
+	public ResponseEntity<?> unheart(@RequestParam Map<String, Object> paramMap) {
+		productService.unheart(paramMap);
+		productService.unlike((int) paramMap.get("prodid"));
+	    return ResponseEntity.ok().body("ok");
+	}
+	@GetMapping("/detail")
+	public ProductVO detail(@RequestParam("prodid") int prodid) {
+		return productService.detail(prodid);
+	}
+	@PostMapping("/add")
+	public ResponseEntity<?> addBoard(ProductVO vo, HttpServletRequest req) {
+		productService.add(vo);
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("업로드 실패");	
+	}
+	@GetMapping("/del")
+	public void DelBoard(@RequestParam("prodid") int prodid) {
+		productService.delete(prodid);
+	}
 	@PostMapping("/commadd")
-	public ResponseEntity<?> boardComm(@RequestBody BoardSkinCommVO vo, HttpServletRequest req){
+	public ResponseEntity<?> boardComm(@RequestBody ProductCommVO vo, HttpServletRequest req){
 		vo.setReip(req.getRemoteAddr());		
-		boardCommService.add(vo);
-//		System.out.println(vo.getBoard_num());
+		productCommService.add(vo);
 		return ResponseEntity.ok().body("ok");
 	}
-	
-//	@GetMapping("/commlist")
-//	public List<Board_CommVO> listBoardComm(@RequestParam("num") int num){	
-//		return boardCommService.listComm(num);
-//	}
-	
 	@RequestMapping("/commlist")
-	public Map<String, Object> boardcommList(@RequestParam Map<String, String> paramMap, HttpServletRequest req){
-		
-		pageVO.setNumPerPage(7);
-		String cPage = paramMap.get("cPage");
+	public Map<String, Object> boardcommList(@RequestParam Map<String, Object> paramMap, HttpServletRequest req){
+		pageVO.setNumPerPage(10);
+		String cPage = (String) paramMap.get("cPage");
 
-		int totalCnt = boardCommService.totalCount(paramMap);
+		int totalCnt = productCommService.totalCount(Integer.parseInt((String) paramMap.get("prodid")));
 		pageVO.setTotalRecord(totalCnt);
 		
 		int totalPage =(int)Math.ceil(totalCnt/ (double)pageVO.getNumPerPage());
@@ -157,10 +146,10 @@ public class BoardProductController {
 		pageVO.setEndPerPage(pageVO.getBeginPerPage()+pageVO.getNumPerPage()-1);
 		
 		Map<String, Object> response = new HashMap<>();
-		Map<String, String> map =new HashMap<>(paramMap);
+		Map<String, Object> map =new HashMap<>(paramMap);
 		map.put("begin", String.valueOf(pageVO.getBeginPerPage()));
 		map.put("end", String.valueOf(pageVO.getEndPerPage()));
-		List<BoardSkinCommVO> list = boardCommService.listComm(map);
+		List<ProductCommVO> list = productCommService.listComm(map);
 		
 		int startPage =(int)((pageVO.getNowPage()-1)/pageVO.getPagePerBlock())*pageVO.getPagePerBlock()+1;
 		int endPage=startPage+pageVO.getPagePerBlock()-1;
@@ -177,15 +166,10 @@ public class BoardProductController {
 		response.put("endPage", endPage);
 		return response;
 	}
+	
 	@PostMapping("/delcomm")
-    public void delComm(@RequestBody BoardSkinCommVO vo) {
-        boardCommService.del(vo);       
+    public void delComm(@RequestBody ProductCommVO vo) {
+		productCommService.del(vo);       
     }
-	@PostMapping("/elike")
-	public ResponseEntity<?> eLike(@RequestParam("num") int num) {
-	    // 서비스 호출하여 DB 업데이트 수행
-	    boardService.elike(num);
-	    return ResponseEntity.ok().body("ok");
-	}
 }
 
