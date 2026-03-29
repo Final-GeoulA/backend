@@ -32,7 +32,6 @@ public class LoginController {
 	    if (result != null && result.get("CNT") != null) {
 	        int cnt = ((Number) result.get("CNT")).intValue();
 	        if (cnt == 1) {
-                System.out.println("배포 테스트");
                 vo.setUser_id(((Number) result.get("USER_ID")).intValue());
 	            vo.setUser_grade_id(((Number) result.get("USER_GRADE_ID")).intValue());
 	            vo.setEmail(result.get("EMAIL").toString());
