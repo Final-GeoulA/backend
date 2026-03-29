@@ -41,7 +41,7 @@ public class LoginController {
 	            vo.setAge(result.get("AGE").toString());
 	            vo.setSkin_type(result.get("SKIN_TYPE").toString());
 	            vo.setGender(result.get("GENDER").toString());
-	            session.setAttribute("loginMember", vo);
+	            session.setAttribute("loginMember", vo);  // 로그인 유저 세션 저장
 	            return "success";
 	        }
 	    }

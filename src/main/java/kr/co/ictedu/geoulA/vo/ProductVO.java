@@ -13,7 +13,9 @@ public class ProductVO {
 	private String name;
 	private String brand;
 	private String category;	// 제품 카테고리
-	private int ingredient;		// 성분
-	private int cost;			// 가격
-	private String image;		// 이미지는 경로만
+	private String ingredient;		// 성분
+	private String cost;			// 가격
+	private int hit;
+	private int elike;
+	private String image;		// 이미지는 외부경로
 }
