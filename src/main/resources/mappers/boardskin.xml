@@ -5,7 +5,7 @@
 
 <mapper namespace="kr.co.ictedu.geoulA.boardSkin.BoardSkinDao">
 <insert id="add" parameterType="boardvo">
-	insert into board_skin values(SEQ_BOARD_SKIN.nextVal,#{title},#{writer},#{content},#{imgn},0,0,#{reip},sysdate,0)
+	insert into board_skin values(SEQ_BOARD_SKIN.nextVal,#{title,jdbcType=VARCHAR},#{writer,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{imgn,jdbcType=VARCHAR},0,0,#{reip,jdbcType=VARCHAR},sysdate,0)
 </insert>
 
 <select id="blist" resultType="boardvo" parameterType="map">
