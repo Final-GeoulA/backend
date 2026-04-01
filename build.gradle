@@ -1,0 +1,60 @@
+plugins {
+   id 'java'
+   id 'org.springframework.boot' version '3.5.11'
+   id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+description = 'Demo project for Spring Boot'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+   implementation 'org.springframework.boot:spring-boot-starter-data-redis'// email 인증 관련
+   implementation 'org.springframework.boot:spring-boot-starter-mail' // email 인증 관련
+   implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+   implementation 'org.springframework.boot:spring-boot-starter-web'
+   implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'
+   implementation 'org.springframework.boot:spring-boot-starter-aop'
+   implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+   implementation 'org.apache.httpcomponents:httpclient:4.5.1'
+    implementation 'software.amazon.awssdk:s3:2.25.0'
+    implementation 'software.amazon.awssdk:auth:2.25.0'
+    implementation 'software.amazon.awssdk:url-connection-client:2.25.0'
+
+    implementation 'org.hibernate.orm:hibernate-community-dialects'
+	// https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload
+	implementation 'commons-fileupload:commons-fileupload:1.5'
+
+   compileOnly 'org.projectlombok:lombok'
+   runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
+   annotationProcessor 'org.projectlombok:lombok'
+   testImplementation 'org.springframework.boot:spring-boot-starter-test'
+   testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.5'
+   testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+   implementation 'org.json:json:20240303' // clova ocr
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.named('bootBuildImage') {
+    builder = 'paketobuildpacks/builder-jammy-base:latest'
+}
+
