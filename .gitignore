@@ -56,6 +56,3 @@ src/main/resources/static/imagefile/
 
 ### Claude Code ###
 .claude/
-
-### Excluded Source Files ###
-build.gradle
