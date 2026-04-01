@@ -20,7 +20,6 @@ import kr.co.ictedu.geoulA.vo.UsersVO;
 
 @RestController
 @RequestMapping("/api/medical-record")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class MedicalRecordController {
 	
     @Autowired
@@ -86,3 +85,5 @@ public class MedicalRecordController {
         return result;
     }
 }
+
+
