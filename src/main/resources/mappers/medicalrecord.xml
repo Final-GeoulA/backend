@@ -1,0 +1,30 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="kr.co.ictedu.geoulA.medicalrecord.MedicalRecordDao">
+    <insert id="insertMedicalRecord" parameterType="kr.co.ictedu.geoulA.vo.MedicalRecordVO">
+        INSERT INTO MEDICAL_RECORD 
+	        (MEDICAL_RECORD_ID, USER_ID, HOSPITAL_NAME,
+	         PAYMENT_DATE, PRICE, MEMO) 
+        VALUES 
+        	(SEQ_MEDICAL_RECORD.NEXTVAL, #{userId}, #{hospitalName},
+             TO_DATE(#{paymentDate}, 'YYYY-MM-DD'), #{price}, #{memo})
+    </insert>
+
+    <select id="selectMedicalRecordList" parameterType="long" resultType="kr.co.ictedu.geoulA.vo.MedicalRecordVO">
+        SELECT
+            MEDICAL_RECORD_ID AS medicalRecordId,
+            USER_ID AS userId,
+            HOSPITAL_NAME AS hospitalName,
+            TO_CHAR(PAYMENT_DATE, 'YYYY-MM-DD') AS paymentDate,
+            PRICE,
+            MEMO
+        FROM MEDICAL_RECORD
+        WHERE USER_ID = #{userId}
+        ORDER BY PAYMENT_DATE ASC, MEDICAL_RECORD_ID ASC
+    </select>
+</mapper>
+
+
+

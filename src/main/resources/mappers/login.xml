@@ -4,7 +4,7 @@
  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
  <mapper namespace="kr.co.ictedu.geoulA.login.LoginDao">
  <select id="loginCheck" parameterType="uvo" resultType="map">
-  select email,password,nickname,1 CNT from users where email=#{email} and password=#{password} group by email,password,nickname
+  select user_id,user_grade_id,email,password,nickname,age,skin_type,gender,1 CNT from users where email=#{email} and password=#{password} group by user_id,user_grade_id,email,password,nickname,age,skin_type,gender
  </select>
  <update id="changePassword">
 	  update users set password=#{password} where email=#{email}

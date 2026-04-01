@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding ="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.ictedu.geoulA.product.ProductDao">
+	<select id="totalCount" resultType="int" parameterType="map">
+		select count(*) from PRODUCT
+			<where>
+				CATEGORY = #{category}
+	        	<if test="mypage == 'true'">
+	            	AND member_num = #{num}
+	        	</if>
+	        	<if test="searchType != null and searchValue != null and searchValue != ''">
+	            	<choose>
+	                	<when test="searchType == 1">
+	                    	AND writer LIKE '%' || #{searchValue} || '%'
+	                	</when>
+	                	<when test="searchType == 2">
+	                    	AND title LIKE '%' || #{searchValue} || '%'
+	                	</when>
+	                	<when test="searchType == 3">
+	                    	AND content LIKE '%' || #{searchValue} || '%'
+	                	</when>
+	            	</choose>
+	        	</if>
+	    	</where>
+	</select>
+
+	<select id="plist" resultType="prdvo" parameterType="map">
+	SELECT PRODUCT_ID, NAME, BRAND, CATEGORY, INGREDIENT, COST, HIT, ELIKE, IMAGE, row_num FROM (
+	SELECT PRODUCT_ID, NAME, BRAND, CATEGORY, INGREDIENT, COST, HIT, ELIKE, IMAGE, ROW_NUMBER() OVER(ORDER BY PRODUCT_ID desc) AS row_num FROM PRODUCT
+		<where>
+			CATEGORY = #{category}
+	    	<if test="mypage == 'true'">
+	        	AND member_num = #{num}
+	    	</if>
+	    	<if test="searchType != null and searchValue != null and searchValue != ''">
+	        	<choose>
+	            	<when test="searchType == 1">
+	                	AND NICKNAME LIKE '%' || #{searchValue} || '%'
+	                </when>
+	                <when test="searchType == 2">
+	                	AND title LIKE '%' || #{searchValue} || '%'
+	                </when>
+	                <when test="searchType == 3">
+	                	AND content LIKE '%' || #{searchValue} || '%'
+	            	</when>
+	        	</choose>
+	    	</if>
+	    </where>
+		) temp_table WHERE row_num BETWEEN #{begin} AND #{end}
+	</select>
+
+	<update id="heart" parameterType="map">
+		insert into PRODUCT_SAVE (PRODUCT_ID, USER_ID) values(#{prodid}, #{userid})
+	</update>
+	
+	<update id="like" parameterType="int">
+		update PRODUCT set HIT=HIT+1 where PRODUCT_ID=#{prodid}
+	</update>
+	
+	<update id="unheart" parameterType="map">
+		delete from PRODUCT_SAVE where PRODUCT_ID=#{prodid} and USER_ID=#{userid}
+	</update>
+	
+	<update id="unlike" parameterType="int">
+		update PRODUCT set HIT=HIT-1 where PRODUCT_ID=#{prodid}
+	</update>
+	
+	<resultMap id="prdResultMap" type="prdvo">
+	    <result property="ingredient" column="INGREDIENT" jdbcType="CLOB" typeHandler="org.apache.ibatis.type.ClobTypeHandler"/>
+	</resultMap>
+	<select id="detail" resultMap="prdResultMap" parameterType="int">
+	    SELECT * FROM PRODUCT WHERE PRODUCT_ID = #{prodid}
+	</select>
+	
+	<update id="hit" parameterType="int">
+		update PRODUCT set HIT=HIT+1 where PRODUCT_ID=#{prodid}
+	</update>
+	
+	<insert id="add" parameterType="prdvo">
+		insert into PRODUCT values(SEQ_PRODUCT.nextVal,#{NAME},#{BRAND},#{CATEGORY},#{INGREDIENT},#{COST},0,0,#{IMAGE})
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		delete from PRODUCT where PRODUCT_ID=#{prodid}
+	</delete>
+</mapper>
