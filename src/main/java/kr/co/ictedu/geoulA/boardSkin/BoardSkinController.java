@@ -99,7 +99,7 @@ public class BoardSkinController {
 		if(endPage>pageVO.getTotalPage()) {
 			endPage=pageVO.getTotalPage();
 		}
-				
+//		System.out.println(list.get());		
 		response.put("data", list);   //페이징 처리가 완료된 리스트를 저장한 데이타	
 		response.put("totalItems", pageVO.getTotalRecord());
 		response.put("totalPages", pageVO.getTotalPage());
