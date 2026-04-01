@@ -10,5 +10,4 @@ import kr.co.ictedu.geoulA.vo.UsersVO;
 public interface LoginDao {
 	// 일반 로그인
 	Map<String, Object> loginCheck(UsersVO vo);
-	void changePassword(UsersVO vo);
 }

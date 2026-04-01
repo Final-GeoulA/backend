@@ -17,5 +17,10 @@ public class UsersService {
 	public int checkEmail(String mail) {
 		return usersDao.countByEmail(mail);
 	}
-	
+	public String useCheckEmail(String mail) {
+		return usersDao.useCheckEmail(mail);
+	}
+    public void changePassword(UsersVO vo) {
+    	usersDao.changePassword(vo);
+    }
 }

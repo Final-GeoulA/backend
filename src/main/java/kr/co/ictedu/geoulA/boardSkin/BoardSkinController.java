@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
-import kr.co.ictedu.geoulA.config.S3Service;
+//import kr.co.ictedu.geoulA.config.S3Service;
 import kr.co.ictedu.geoulA.vo.BoardSkinVO;
 import kr.co.ictedu.geoulA.vo.BoardSkinCommVO;
 import kr.co.ictedu.geoulA.vo.PageVO;
@@ -35,23 +35,23 @@ public class BoardSkinController {
 	@Autowired
 	private BoardSkinCommService boardCommService;
 
-	@Autowired
-	private S3Service s3Service;
-
-	@PostMapping("/add")
-	public ResponseEntity<?> addBoard(BoardSkinVO vo, HttpServletRequest req) {
-		vo.setReip(req.getRemoteAddr());
-		MultipartFile mf = vo.getMfile();
-		try {
-			String imageUrl = s3Service.upload(mf);
-			vo.setImgn(imageUrl);
-			boardService.add(vo);
-			return ResponseEntity.ok().body("업로드 성공!");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("업로드 실패");
-	}
+//	@Autowired
+//	private S3Service s3Service;
+//
+//	@PostMapping("/add")
+//	public ResponseEntity<?> addBoard(BoardSkinVO vo, HttpServletRequest req) {
+//		vo.setReip(req.getRemoteAddr());
+//		MultipartFile mf = vo.getMfile();
+//		try {
+//			String imageUrl = s3Service.upload(mf);
+//			vo.setImgn(imageUrl);
+//			boardService.add(vo);
+//			return ResponseEntity.ok().body("업로드 성공!");
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("업로드 실패");
+//	}
 	@GetMapping("/del")
 	public void DelBoard(@RequestParam("num") int num) {
 		boardService.del(num);

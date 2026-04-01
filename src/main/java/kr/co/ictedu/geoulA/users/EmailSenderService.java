@@ -60,7 +60,7 @@ public class EmailSenderService {
 		 try {
 			MimeMessageHelper helper = new MimeMessageHelper(message,true);
 			System.out.println("toEmail = [" + toEmail + "]");
-			helper.setFrom("zhalrtjddn01@naver.com");
+			helper.setFrom("ictmankwon@naver.com");
 			helper.setTo(toEmail);
 			helper.setSubject("GeoulA팀의 회원가입 인증번호 발송");
 			StringBuilder body = new StringBuilder();
@@ -78,7 +78,36 @@ public class EmailSenderService {
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
-	 }// 인증번호확인, 즉 해당 이메일에 대한 인증코드의 시도횟수를 3회 까지 해준다는 설정
+	 }
+	//비밀번호 찾기 : 이메일 인증번호 발송
+	 public void sendEmailPw(String toEmail) {
+		 System.out.println(toEmail);
+		 createAuthCode();
+		 MimeMessage message = mailSender.createMimeMessage();
+		 try {
+			MimeMessageHelper helper = new MimeMessageHelper(message,true);
+			System.out.println("toEmail = [" + toEmail + "]");
+			helper.setFrom("ictmankwon@naver.com");
+			helper.setTo(toEmail);
+			helper.setSubject("GeoulA팀의 비밀번호 변경 인증번호 발송");
+			StringBuilder body = new StringBuilder();
+			body.append("<html><body>");
+			body.append("<h1>GeoulA팀의 비밀번호 변경을 위한 인증번호</h1>");
+			body.append("<p>비밀번호 변경을 완료하기 위해 아래의 인증코드를 입력해주세요.</p>");
+			body.append("<p>인증코드 : <strong>");
+			body.append(authCode);
+			body.append("</strong></p>");
+			body.append("</body></html>");
+			helper.setText(body.toString(),true);
+			mailSender.send(message);
+			System.out.println("인증코드(테스트용):" + authCode);
+			certificationNumberRedisDao.saveCertifiRedisNumber(toEmail, authCode);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+	 }
+	 
+	 // 인증번호확인, 즉 해당 이메일에 대한 인증코드의 시도횟수를 3회 까지 해준다는 설정
 	 public boolean isVerify(String email , String authCode) {
 		 final int MAX_ATTEMPT = 3;
 		 if(!certificationNumberRedisDao.hasKey(email)) {
@@ -101,6 +130,27 @@ public class EmailSenderService {
 			 return false;
 		 }
 	 }
+	 // 비밀번호 찾기에서 이메일 인증이 성공했을 경우 임시의 난수 비밀번호 생성
+	 public String createTempPw() {
+			int length = 24;
+			StringBuilder tempPw = new StringBuilder(); //StringBuilder -> 문자열과 문자열을 결합할때 사용됨
+			Random random = new Random(); 
+			for(int i=0; i < length; i++) {
+				int type = random.nextInt(3); //0,1,2 의 랜덤한숫자를 type에 저장
+				switch(type) {
+				case 0: tempPw.append(random.nextInt(10)); // type이 0일 경우: random.nextInt(10) => 0~9까지의 랜덤한 숫자를 뽑음
+				break;
+				case 1: tempPw.append((char)(random.nextInt(26)+65)); //type이 1일 경우: A~Z까지 대문자를 뽑아옴
+				break;
+				case 2: tempPw.append((char)(random.nextInt(26)+97));// type이 2일 경우: a~z까지 소문자를 뽑아옴
+				break;
+				default:
+					throw new IllegalArgumentException("Unexpected value:"+ type); //메서드에 잘못된 또는 부적절한 인수가 전달될 때 발생하는 런타임 예외
+				}
+			}
+			//멤버 필드에 랜덤화된 인증코드 24자리를 저장해둠
+			return tempPw.toString();
+		}
 }
 
 
