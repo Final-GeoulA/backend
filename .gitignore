@@ -59,4 +59,3 @@ src/main/resources/static/imagefile/
 
 ### Excluded Source Files ###
 build.gradle
-src/main/java/kr/co/ictedu/geoulA/GeoulAApplication.java
