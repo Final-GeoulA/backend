@@ -7,4 +7,19 @@
         INSERT INTO USER_SKIN_IMG (USER_SKIN_IMG_ID, USER_ID, IMG)
         VALUES (seq_user_skin_img.NEXTVAL, #{userId}, #{img})
     </insert>
+   <select id="selectLatestSkinImgs" resultType="kr.co.ictedu.geoulA.vo.SkinImgVO">
+    SELECT 
+    t1.USER_SKIN_IMG_ID AS userSkinImgId,
+    t1.USER_ID AS userId,
+    u.nickname AS nickname,
+    t1.IMG AS img,
+    t1.BDATE AS bdate
+FROM USER_SKIN_IMG t1
+JOIN USERS u ON t1.user_id = u.user_id
+WHERE t1.bdate = (
+    SELECT MAX(t2.bdate)
+    FROM USER_SKIN_IMG t2
+    WHERE t2.user_id = t1.user_id
+)
+</select>
 </mapper>
