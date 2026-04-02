@@ -71,6 +71,7 @@
 	<resultMap id="prdResultMap" type="prdvo">
 	    <result property="ingredient" column="INGREDIENT" jdbcType="CLOB" typeHandler="org.apache.ibatis.type.ClobTypeHandler"/>
 	</resultMap>
+
 	<select id="detail" resultMap="prdResultMap" parameterType="int">
 	    SELECT * FROM PRODUCT WHERE PRODUCT_ID = #{prodid}
 	</select>
