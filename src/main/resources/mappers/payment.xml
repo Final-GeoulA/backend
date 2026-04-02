@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.ictedu.geoulA.payment.PaymentDao">
+
+    <insert id="insertPayment">
+        INSERT INTO PAYMENT (PAYMENT_ID, ORDER_ID, USER_ID, AMOUNT, STATUS)
+        VALUES (#{payment_id}, #{order_id}, #{user_id}, #{amount}, #{status})
+    </insert>
+
+    <update id="updateUserGrade">
+        UPDATE USERS SET USER_GRADE_ID = 2 WHERE USER_ID = #{userId}
+    </update>
+
+</mapper>
