@@ -1,11 +1,13 @@
 package kr.co.ictedu.geoulA.skinimg;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,6 +60,45 @@ public class SkinImgController {
             e.printStackTrace();
             result.put("success", false);
             result.put("message", "업로드 실패: " + e.getMessage());
+        }
+
+        return result;
+    }
+//    @GetMapping("/latest")
+//    public Map<String, Object> getLatestSkinImg(HttpSession session) {
+//
+//        Map<String, Object> result = new HashMap<>();
+//
+//        UsersVO loginMember = (UsersVO) session.getAttribute("loginMember");
+//
+//        if (loginMember == null) {
+//            result.put("success", false);
+//            result.put("message", "로그인이 필요합니다.");
+//            return result;
+//        }
+//
+//        SkinImgVO img = skinImgService
+//                .selectLatestSkinImg((long) loginMember.getUser_id());
+//
+//        result.put("success", true);
+//        result.put("img", img);
+//
+//        return result;
+//    }
+    
+    @GetMapping("/list")
+    public Map<String, Object> getSkinImgList() {
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            List<SkinImgVO> list = skinImgService.getLatestSkinImgs();
+
+            result.put("success", true);
+            result.put("list", list);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
         }
 
         return result;

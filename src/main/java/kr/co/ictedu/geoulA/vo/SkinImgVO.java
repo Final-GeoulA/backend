@@ -7,4 +7,5 @@ public class SkinImgVO {
     private Long userId;
     private String img;
     private String bdate;
+    private String nickname;
 }
