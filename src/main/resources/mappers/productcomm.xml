@@ -16,7 +16,8 @@
 	</select>
 	
 	<insert id="addComm" parameterType="prdcommvo" >
-		insert into PRODUCT_COMM values(SEQ_BOARD_RECOMMEND_COMM.nextVal, #{PRODUCT_ID},#{user_id},#{content},0,#{reip},sysdate)
+		insert into PRODUCT_COMM(PRODUCT_COMM_ID, PRODUCT_ID, USER_ID, USER_NAME, CONTENT, ELIKE, REIP, BCDATE)
+		values(SEQ_BOARD_RECOMMEND_COMM.nextVal, #{product_id}, #{user_id}, #{user_name}, #{content}, 0, #{reip}, sysdate)
 	</insert>
 
 	<delete id="delComm" parameterType="int">
