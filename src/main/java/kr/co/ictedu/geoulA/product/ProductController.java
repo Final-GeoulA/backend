@@ -20,8 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 //import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import kr.co.ictedu.geoulA.passwordless.MessageUtils;
 import kr.co.ictedu.geoulA.vo.ProductCommVO;
+import kr.co.ictedu.geoulA.vo.UsersVO;
 import kr.co.ictedu.geoulA.vo.PageVO;
 import kr.co.ictedu.geoulA.vo.ProductVO;
 
@@ -116,9 +118,17 @@ public class ProductController {
 	public void DelBoard(@RequestParam("prodid") int prodid) {
 		productService.delete(prodid);
 	}
+
+
 	@PostMapping("/commadd")
-	public ResponseEntity<?> boardComm(@RequestBody ProductCommVO vo, HttpServletRequest req){
-		vo.setReip(req.getRemoteAddr());		
+	public ResponseEntity<?> boardComm(@RequestBody ProductCommVO vo, HttpServletRequest req, HttpSession session){
+		UsersVO loginMember = (UsersVO) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+		}
+		vo.setUser_id(String.valueOf(loginMember.getUser_id()));
+		vo.setUser_name(loginMember.getNickname());
+		vo.setReip(req.getRemoteAddr());
 		productCommService.add(vo);
 		return ResponseEntity.ok().body("ok");
 	}
