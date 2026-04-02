@@ -60,6 +60,9 @@ update board_skin set hit=hit+1 where board_skin_id=#{num}
 <update id="elike" parameterType="int">
 update board_skin set elike=elike+1 where board_skin_id=#{num}
 </update>
+<update id="boardUpdate" parameterType="boardvo">
+UPDATE BOARD_SKIN SET title=#{title},content=#{content},IMGN=#{imgn},BDATE=SYSDATE WHERE BOARD_SKIN_ID = #{board_skin_id}
+</update>
     <select id="detail" parameterType="int" resultType="boardvo">
         SELECT BOARD_SKIN_ID as board_skin_id, title, NICKNAME as writer,
         content, imgn, hit, elike, reip, bdate
