@@ -34,6 +34,19 @@ public class MailCertificationController {
 		}
 	}
 	
+	@PostMapping("/emailCheckPw")
+	public int sendEmailPw(@RequestBody EmailCheckVO email) {
+		int checkEmail = emailSenderService.duplicateEmail(email.getEmail());
+		if(checkEmail == 1) {
+			emailSenderService.sendEmailPw(email.getEmail());
+			System.out.println("이메일이 요청 되었습니다.:"+email.getEmail());
+			return 0;
+		}else {
+			System.out.println("존재하지 않는 이메일 입니다.:"+email.getEmail());
+			return 1;
+		}
+	}
+	
 	//최종적으로 해당 이메일에 대한 인증코드가 생성됐으면 그 이메일에 대한 시도횟수,성공,실패를 위한 설정 
 	@PostMapping("/emailCheck/certification")
 	public ResponseEntity<EmailCountCheckVO> verifyCertificationNumber(@RequestBody EmailCheckVO dto){
@@ -53,6 +66,12 @@ public class MailCertificationController {
 			certificationNumberRedisDao.increaseAttempt(dto.getEmail());
 			return ResponseEntity.ok(new EmailCountCheckVO(false,"wrong"));
 		}
+	}
+	
+	@PostMapping("/temppw")
+	public String temporaryPassword() {
+		String temp = emailSenderService.createTempPw();
+		return temp;
 	}
 }
 
