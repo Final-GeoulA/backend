@@ -24,4 +24,14 @@ public class UsersController {
 		return ResponseEntity.ok().build();
 	}
 	
+	@PostMapping("/lookupemail")
+	public String useCheckEmail(String email) {
+		return usersService.useCheckEmail(email);
+	}
+	
+	@PostMapping("/updatePassword")
+	public ResponseEntity<?> updatePassword(@RequestBody UsersVO vo) {
+		usersService.changePassword(vo);
+		return ResponseEntity.ok("ok");
+	}
 }
