@@ -8,19 +8,16 @@
 		select count(*) from PRODUCT
 			<where>
 				CATEGORY = #{category}
-	        	<if test="mypage == 'true'">
-	            	AND member_num = #{num}
-	        	</if>
-	        	<if test="searchType != null and searchValue != null and searchValue != ''">
+	        	<if test="type != null and keyword != null and keyword != ''">
 	            	<choose>
-	                	<when test="searchType == 1">
-	                    	AND writer LIKE '%' || #{searchValue} || '%'
+	                	<when test="type == '상품명'">
+	                    	AND NAME LIKE '%' || #{keyword} || '%'
 	                	</when>
-	                	<when test="searchType == 2">
-	                    	AND title LIKE '%' || #{searchValue} || '%'
+	                	<when test="type == '브랜드'">
+	                    	AND BRAND LIKE '%' || #{keyword} || '%'
 	                	</when>
-	                	<when test="searchType == 3">
-	                    	AND content LIKE '%' || #{searchValue} || '%'
+	                	<when test="type == '성분'">
+	                    	AND INGREDIENT LIKE '%' || #{keyword} || '%'
 	                	</when>
 	            	</choose>
 	        	</if>
@@ -32,22 +29,19 @@
 	SELECT PRODUCT_ID, NAME, BRAND, CATEGORY, INGREDIENT, COST, HIT, ELIKE, IMAGE, ROW_NUMBER() OVER(ORDER BY PRODUCT_ID desc) AS row_num FROM PRODUCT
 		<where>
 			CATEGORY = #{category}
-	    	<if test="mypage == 'true'">
-	        	AND member_num = #{num}
-	    	</if>
-	    	<if test="searchType != null and searchValue != null and searchValue != ''">
-	        	<choose>
-	            	<when test="searchType == 1">
-	                	AND NICKNAME LIKE '%' || #{searchValue} || '%'
-	                </when>
-	                <when test="searchType == 2">
-	                	AND title LIKE '%' || #{searchValue} || '%'
-	                </when>
-	                <when test="searchType == 3">
-	                	AND content LIKE '%' || #{searchValue} || '%'
-	            	</when>
-	        	</choose>
-	    	</if>
+	    	<if test="type != null and keyword != null and keyword != ''">
+	            	<choose>
+	                	<when test="type == '상품명'">
+	                    	AND NAME LIKE '%' || #{keyword} || '%'
+	                	</when>
+	                	<when test="type == '브랜드'">
+	                    	AND BRAND LIKE '%' || #{keyword} || '%'
+	                	</when>
+	                	<when test="type == '성분'">
+	                    	AND INGREDIENT LIKE '%' || #{keyword} || '%'
+	                	</when>
+	            	</choose>
+	        	</if>
 	    </where>
 		) temp_table WHERE row_num BETWEEN #{begin} AND #{end}
 	</select>
