@@ -31,7 +31,7 @@ public class GeoulAApplication extends SpringBootServletInitializer {
 				System.out.println("Cros Allow Origin 실행");
 				registry.addMapping("/**")
 
-				.allowedOrigins("http://localhost:3001","http://localhost:3000","http://192.168.0.88:3001","http://192.168.0.88:3000")
+				.allowedOrigins("http://localhost:3001","http://localhost:3000","http://192.168.0.23:3001","http://192.168.0.23:3000")
 
 				.allowedHeaders("*")
 				.allowCredentials(true)
