@@ -24,13 +24,16 @@ public class LoginAdvice {
 			HttpSession session = (HttpSession) fd[0];
 			HttpServletRequest request = (HttpServletRequest) fd[1];
 			UsersVO vo = (UsersVO) session.getAttribute("loginMember");
-			if (vo != null) { // 로그인 정보가 있으면
+			if (vo != null) {
+				logvo.setUser_id(vo.getUser_id());
 				logvo.setEmail(vo.getEmail());
 				logvo.setStatus(status);
 				logvo.setReip(request.getRemoteAddr());
+
 				String userAgent = request.getHeader("User-Agent");
 				String parsedAgent = UserAgentUtils.parseAgent(userAgent);
 				logvo.setUagent(parsedAgent);
+
 				dao.addLog(logvo);
 			}
 		}
