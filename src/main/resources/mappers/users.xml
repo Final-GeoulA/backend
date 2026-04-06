@@ -12,4 +12,7 @@ select count(*) cnt from users where email = #{email}
 <select id="useCheckEmail" parameterType="string" resultType="string">
 select email from users where email = #{email}
 </select>
+<update id="changePassword" parameterType="uvo">
+update users set password=#{password} where email=#{email}
+</update>
  </mapper>

@@ -21,6 +21,7 @@ public class BoardSkinVO {
 	private String reip;
 	private String bdate;
 //	private String comm_count;
+	private String textemotion;
 	private MultipartFile mfile;
 	
 	

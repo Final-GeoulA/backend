@@ -16,8 +16,5 @@ public class LoginService {
 	public Map<String, Object> loginCheck(UsersVO vo){
 		return loginDao.loginCheck(vo);
 	}
-	 // 비밀번호 변경
-    public void changePassword(UsersVO vo) {
-        loginDao.changePassword(vo);
-    }
+
 }
