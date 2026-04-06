@@ -39,13 +39,27 @@ public class BoardSkinController {
 	@Autowired
 	private S3Service s3Service;
 
+	@PostMapping("/uploadImage")
+	public ResponseEntity<?> uploadImage(@RequestParam("upload") MultipartFile file) {
+		try {
+			String url = s3Service.upload(file);
+			Map<String, String> result = new HashMap<>();
+			result.put("url", url);
+			return ResponseEntity.ok(result);
+		} catch (IOException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 업로드 실패");
+		}
+	}
+
 	@PostMapping("/add")
 	public ResponseEntity<?> addBoard(BoardSkinVO vo, HttpServletRequest req) {
 		vo.setReip(req.getRemoteAddr());
 		MultipartFile mf = vo.getMfile();
 		try {
-			String imageUrl = s3Service.upload(mf);
-			vo.setImgn(imageUrl);
+			if (mf != null && !mf.isEmpty()) {
+				String imageUrl = s3Service.upload(mf);
+				vo.setImgn(imageUrl);
+			}
 			boardService.add(vo);
 			return ResponseEntity.ok().body("업로드 성공!");
 		} catch (IOException e) {
@@ -183,8 +197,10 @@ public class BoardSkinController {
 		vo.setReip(req.getRemoteAddr());
 		MultipartFile mf = vo.getMfile();
 		try {
-			String imageUrl = s3Service.upload(mf);
-			vo.setImgn(imageUrl);
+			if (mf != null && !mf.isEmpty()) {
+				String imageUrl = s3Service.upload(mf);
+				vo.setImgn(imageUrl);
+			}
 		} catch (IOException e) {
 			System.out.println("이미지가 정상적으로 업로드 되지 않았습니다.");
 			e.printStackTrace();

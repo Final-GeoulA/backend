@@ -26,13 +26,13 @@ select count(*) cnt from board_skin_comm where board_skin_id=#{board_skin_id}
 
 <update id="plusComm">
     UPDATE BOARD_SKIN
-    SET comm_count = comm_count + 1 
+    SET comm_count = comm_count + 1
     WHERE board_skin_id = #{board_skin_id}
 </update>
 
 <update id="minusComm">
     UPDATE BOARD_SKIN
-    SET comm_count = comm_count - 1 
+    SET comm_count = comm_count - 1
     WHERE board_skin_id = #{board_skin_id}
 </update>
 
