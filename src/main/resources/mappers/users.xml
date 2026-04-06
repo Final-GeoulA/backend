@@ -4,7 +4,7 @@
  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
  <mapper namespace="kr.co.ictedu.geoulA.users.UsersDao">
  <insert id="insertUser" parameterType="uvo">
- insert into users(user_id,email,password,nickname,age,skin_type,gender) values(seq_users.nextval,#{email},#{password},#{nickname},#{age},#{skin_type},#{gender})
+ insert into users(user_id,email,password,nickname,age,skin_type,gender,udate) values(seq_users.nextval,#{email},#{password},#{nickname},#{age},#{skin_type},#{gender},sysdate)
  </insert>
  <select id="countByEmail" parameterType="string" resultType="int">
 select count(*) cnt from users where email = #{email}
