@@ -28,6 +28,9 @@ public class BoardSkinService {
 	public void elike (int num) {
 		boardDao.elike(num);
 	}
+	public void boardUpdate(BoardSkinVO vo) {
+		boardDao.boardUpdate(vo);
+	}
 	public BoardSkinVO detail(int num) {
 		hit(num);
 		return boardDao.detail(num);

@@ -14,7 +14,9 @@ public interface BoardSkinDao {
 	
 	void hit (int num);
 	void elike (int num);
+	void boardUpdate(BoardSkinVO vo);
 	BoardSkinVO detail(int num);
 	void delete (int num);
 	int totalCount(Map<String, String> map);
+	
 }

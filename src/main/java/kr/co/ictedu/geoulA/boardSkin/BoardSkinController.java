@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -176,6 +177,19 @@ public class BoardSkinController {
 	    // 서비스 호출하여 DB 업데이트 수행
 	    boardService.elike(num);
 	    return ResponseEntity.ok().body("ok");
+	}
+	@PostMapping("/update")
+	public void boardUpdate(@ModelAttribute BoardSkinVO vo ,HttpServletRequest req) {
+		vo.setReip(req.getRemoteAddr());
+		MultipartFile mf = vo.getMfile();
+		try {
+			String imageUrl = s3Service.upload(mf);
+			vo.setImgn(imageUrl);
+		} catch (IOException e) {
+			System.out.println("이미지가 정상적으로 업로드 되지 않았습니다.");
+			e.printStackTrace();
+		}
+		boardService.boardUpdate(vo);
 	}
 }
 
