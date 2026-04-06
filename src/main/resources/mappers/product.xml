@@ -95,11 +95,6 @@
 	<resultMap id="prdResultMap" type="prdvo" autoMapping="true">
 	    <result property="ingredient" column="INGREDIENT" jdbcType="CLOB" typeHandler="org.apache.ibatis.type.ClobTypeHandler"/>
 	</resultMap>
-<<<<<<< Updated upstream
-
-	<select id="detail" resultMap="prdResultMap" parameterType="int">
-	    SELECT * FROM PRODUCT WHERE PRODUCT_ID = #{prodid}
-=======
 	<select id="detail" resultMap="prdResultMap" parameterType="map">
 	    SELECT P.*,
 	    <choose>
@@ -113,7 +108,6 @@
 	        LEFT JOIN PRODUCT_SAVE PS ON P.PRODUCT_ID = PS.PRODUCT_ID AND PS.USER_ID = #{userid}
 	    </if>
 	    WHERE P.PRODUCT_ID = #{prodid}
->>>>>>> Stashed changes
 	</select>
 	
 	<update id="hit" parameterType="int">
