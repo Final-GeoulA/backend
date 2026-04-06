@@ -5,22 +5,24 @@
 
 <mapper namespace="kr.co.ictedu.geoulA.product.ProductDao">
 	<select id="totalCount" resultType="int" parameterType="map">
-		select count(*) from PRODUCT
+		select count(*) from PRODUCT P
+		<if test="liked != null and id != null">
+			INNER JOIN PRODUCT_SAVE PS ON P.PRODUCT_ID = PS.PRODUCT_ID AND PS.USER_ID = #{id}
+		</if>
 			<where>
-				CATEGORY = #{category}
-	        	<if test="mypage == 'true'">
-	            	AND member_num = #{num}
-	        	</if>
-	        	<if test="searchType != null and searchValue != null and searchValue != ''">
+				<if test="liked == null">
+					P.CATEGORY = #{category}
+				</if>
+	        	<if test="type != null and keyword != null and keyword != ''">
 	            	<choose>
-	                	<when test="searchType == 1">
-	                    	AND writer LIKE '%' || #{searchValue} || '%'
+	                	<when test="type == '상품명'">
+	                    	AND P.NAME LIKE '%' || #{keyword} || '%'
 	                	</when>
-	                	<when test="searchType == 2">
-	                    	AND title LIKE '%' || #{searchValue} || '%'
+	                	<when test="type == '브랜드'">
+	                    	AND P.BRAND LIKE '%' || #{keyword} || '%'
 	                	</when>
-	                	<when test="searchType == 3">
-	                    	AND content LIKE '%' || #{searchValue} || '%'
+	                	<when test="type == '성분'">
+	                    	AND P.INGREDIENT LIKE '%' || #{keyword} || '%'
 	                	</when>
 	            	</choose>
 	        	</if>
@@ -28,52 +30,84 @@
 	</select>
 
 	<select id="plist" resultType="prdvo" parameterType="map">
-	SELECT PRODUCT_ID, NAME, BRAND, CATEGORY, INGREDIENT, COST, HIT, ELIKE, IMAGE, row_num FROM (
-	SELECT PRODUCT_ID, NAME, BRAND, CATEGORY, INGREDIENT, COST, HIT, ELIKE, IMAGE, ROW_NUMBER() OVER(ORDER BY PRODUCT_ID desc) AS row_num FROM PRODUCT
+	SELECT PRODUCT_ID, NAME, BRAND, CATEGORY, INGREDIENT, COST, HIT, ELIKE, IMAGE, HEARTED, row_num FROM (
+	SELECT P.PRODUCT_ID, P.NAME, P.BRAND, P.CATEGORY, P.INGREDIENT, P.COST, P.HIT, P.ELIKE, P.IMAGE,
+		<choose>
+			<when test="liked != null and id != null">
+				1 AS HEARTED,
+			</when>
+			<when test="id != null">
+				CASE WHEN PS.USER_ID IS NOT NULL THEN 1 ELSE 0 END AS HEARTED,
+			</when>
+			<otherwise>
+				0 AS HEARTED,
+			</otherwise>
+		</choose>
+		ROW_NUMBER() OVER(ORDER BY P.ELIKE DESC, P.PRODUCT_ID DESC) AS row_num
+	FROM PRODUCT P
+	<choose>
+		<when test="liked != null and id != null">
+			INNER JOIN PRODUCT_SAVE PS ON P.PRODUCT_ID = PS.PRODUCT_ID AND PS.USER_ID = #{id}
+		</when>
+		<otherwise>
+			<if test="id != null">
+				LEFT JOIN PRODUCT_SAVE PS ON P.PRODUCT_ID = PS.PRODUCT_ID AND PS.USER_ID = #{id}
+			</if>
+		</otherwise>
+	</choose>
 		<where>
-			CATEGORY = #{category}
-	    	<if test="mypage == 'true'">
-	        	AND member_num = #{num}
-	    	</if>
-	    	<if test="searchType != null and searchValue != null and searchValue != ''">
-	        	<choose>
-	            	<when test="searchType == 1">
-	                	AND NICKNAME LIKE '%' || #{searchValue} || '%'
-	                </when>
-	                <when test="searchType == 2">
-	                	AND title LIKE '%' || #{searchValue} || '%'
-	                </when>
-	                <when test="searchType == 3">
-	                	AND content LIKE '%' || #{searchValue} || '%'
-	            	</when>
-	        	</choose>
-	    	</if>
+			<if test="liked == null">
+				P.CATEGORY = #{category}
+			</if>
+	    	<if test="type != null and keyword != null and keyword != ''">
+	            	<choose>
+	                	<when test="type == '상품명'">
+	                    	AND P.NAME LIKE '%' || #{keyword} || '%'
+	                	</when>
+	                	<when test="type == '브랜드'">
+	                    	AND P.BRAND LIKE '%' || #{keyword} || '%'
+	                	</when>
+	                	<when test="type == '성분'">
+	                    	AND P.INGREDIENT LIKE '%' || #{keyword} || '%'
+	                	</when>
+	            	</choose>
+	        	</if>
 	    </where>
 		) temp_table WHERE row_num BETWEEN #{begin} AND #{end}
 	</select>
 
-	<update id="heart" parameterType="map">
+	<insert id="heart" parameterType="map">
 		insert into PRODUCT_SAVE (PRODUCT_ID, USER_ID) values(#{prodid}, #{userid})
-	</update>
+	</insert>
 	
 	<update id="like" parameterType="int">
-		update PRODUCT set HIT=HIT+1 where PRODUCT_ID=#{prodid}
+		update PRODUCT set ELIKE=ELIKE+1 where PRODUCT_ID=#{prodid}
 	</update>
 	
-	<update id="unheart" parameterType="map">
+	<delete id="unheart" parameterType="map">
 		delete from PRODUCT_SAVE where PRODUCT_ID=#{prodid} and USER_ID=#{userid}
-	</update>
+	</delete>
 	
 	<update id="unlike" parameterType="int">
-		update PRODUCT set HIT=HIT-1 where PRODUCT_ID=#{prodid}
+		update PRODUCT set ELIKE=ELIKE-1 where PRODUCT_ID=#{prodid}
 	</update>
 	
-	<resultMap id="prdResultMap" type="prdvo">
+	<resultMap id="prdResultMap" type="prdvo" autoMapping="true">
 	    <result property="ingredient" column="INGREDIENT" jdbcType="CLOB" typeHandler="org.apache.ibatis.type.ClobTypeHandler"/>
 	</resultMap>
-
-	<select id="detail" resultMap="prdResultMap" parameterType="int">
-	    SELECT * FROM PRODUCT WHERE PRODUCT_ID = #{prodid}
+	<select id="detail" resultMap="prdResultMap" parameterType="map">
+	    SELECT P.*,
+	    <choose>
+	        <when test="userid != null">
+	            CASE WHEN PS.USER_ID IS NOT NULL THEN 1 ELSE 0 END AS HEARTED
+	        </when>
+	        <otherwise>0 AS HEARTED</otherwise>
+	    </choose>
+	    FROM PRODUCT P
+	    <if test="userid != null">
+	        LEFT JOIN PRODUCT_SAVE PS ON P.PRODUCT_ID = PS.PRODUCT_ID AND PS.USER_ID = #{userid}
+	    </if>
+	    WHERE P.PRODUCT_ID = #{prodid}
 	</select>
 	
 	<update id="hit" parameterType="int">
@@ -87,4 +121,13 @@
 	<delete id="delete" parameterType="int">
 		delete from PRODUCT where PRODUCT_ID=#{prodid}
 	</delete>
+
+	<select id="similar" resultType="prdvo" parameterType="map">
+		SELECT * FROM (
+			SELECT P.PRODUCT_ID, P.NAME, P.BRAND, P.CATEGORY, P.COST, P.ELIKE, P.IMAGE,
+				ROW_NUMBER() OVER(ORDER BY P.ELIKE DESC, P.PRODUCT_ID DESC) AS rn
+			FROM PRODUCT P
+			WHERE P.CATEGORY = #{category} AND P.PRODUCT_ID != #{prodid}
+		) WHERE rn &lt;= 5
+	</select>
 </mapper>

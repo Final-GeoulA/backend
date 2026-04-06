@@ -1,5 +1,7 @@
 package kr.co.ictedu.geoulA.vo;
 
+import java.util.Date;
+
 import org.apache.ibatis.type.Alias;
 
 import lombok.Getter;
@@ -17,4 +19,5 @@ public class UsersVO {
 	private String age; // 나이
 	private String skin_type; // 피부타입
     private String gender;
+    private String udate;
 }

@@ -19,7 +19,7 @@ public interface BoardSkinCommDao {
 
 	int totalCount(Map<String, String> map);
 
-	void plusComm(@Param("num") int num);
+	void plusComm(@Param("board_skin_id") int board_skin_id);
 
-	void minusComm(@Param("num") int num);
+	void minusComm(@Param("board_skin_id") int board_skin_id);
 }
