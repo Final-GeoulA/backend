@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding ="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="kr.co.ictedu.geoulA.skinvote.SkinVoteDao">
+
+      <!-- 투표 저장 -->
+    <insert id="insertVote">
+        INSERT INTO skin_vote (
+            vote_id,
+            winner_id,
+            loser_id,
+            vote_time
+        ) VALUES (
+            seq_skin_vote.NEXTVAL,
+            #{winnerId},
+            #{loserId},
+            SYSDATE
+        )
+    </insert>
+
+    <select id="getAllRanks" resultType="kr.co.ictedu.geoulA.vo.SkinVoteVO">
+    SELECT 
+        user_id AS userId,
+        SUM(win) AS winCount,
+        SUM(lose) AS loseCount
+    FROM (
+        SELECT winner_id AS user_id, 1 AS win, 0 AS lose FROM skin_vote
+        UNION ALL
+        SELECT loser_id AS user_id, 0 AS win, 1 AS lose FROM skin_vote
+    )
+    GROUP BY user_id
+    ORDER BY winCount DESC
+</select>
+
+</mapper>
