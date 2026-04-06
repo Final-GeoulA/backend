@@ -33,13 +33,11 @@ dependencies {
    implementation 'org.springframework.boot:spring-boot-starter-aop'
    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
    implementation 'org.apache.httpcomponents:httpclient:4.5.1'
-
-    implementation 'software.amazon.awssdk:s3:2.25.0'
+		implementation 'software.amazon.awssdk:s3:2.25.0'
     implementation 'software.amazon.awssdk:auth:2.25.0'
     implementation 'software.amazon.awssdk:url-connection-client:2.25.0'
-
-    implementation 'org.hibernate.orm:hibernate-community-dialects'
-
+   
+   implementation 'org.hibernate.orm:hibernate-community-dialects'
 	// https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload
 	implementation 'commons-fileupload:commons-fileupload:1.5'
 
@@ -50,7 +48,6 @@ dependencies {
    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.5'
    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
    implementation 'org.json:json:20240303' // clova ocr
-
 }
 
 tasks.named('test') {
