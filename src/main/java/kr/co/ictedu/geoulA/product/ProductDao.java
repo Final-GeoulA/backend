@@ -15,8 +15,9 @@ public interface ProductDao {
 	void like (int prodid);
 	void unheart (Map<String, Object> map);
 	void unlike (int prodid);
-	ProductVO detail(int prodid);
+	ProductVO detail(Map<String, Object> map);
 	void hit (int prodid);
 	void add (ProductVO vo);	//관리자 권한
 	void delete (int prodid);		//관리자 권한
+	List<ProductVO> similar(Map<String, Object> map);
 }

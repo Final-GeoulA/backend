@@ -96,18 +96,19 @@ public class ProductController {
 	@RequestMapping("/heart")
 	public ResponseEntity<?> heart(@RequestParam Map<String, Object> paramMap) {
 		productService.heart(paramMap);
-		productService.like((int) paramMap.get("prodid"));
+		productService.like(Integer.parseInt((String) paramMap.get("prodid")));
 	    return ResponseEntity.ok().body("ok");
 	}
 	@RequestMapping("/unheart")
 	public ResponseEntity<?> unheart(@RequestParam Map<String, Object> paramMap) {
 		productService.unheart(paramMap);
-		productService.unlike((int) paramMap.get("prodid"));
+		productService.unlike(Integer.parseInt((String) paramMap.get("prodid")));
 	    return ResponseEntity.ok().body("ok");
 	}
 	@GetMapping("/detail")
-	public ProductVO detail(@RequestParam("prodid") int prodid) {
-		return productService.detail(prodid);
+	public ProductVO detail(@RequestParam Map<String, Object> paramMap) {
+		productService.hit(Integer.parseInt((String) paramMap.get("prodid")));
+		return productService.detail(paramMap);
 	}
 	@PostMapping("/add")
 	public ResponseEntity<?> addBoard(ProductVO vo, HttpServletRequest req) {
@@ -181,5 +182,9 @@ public class ProductController {
     public void delComm(@RequestBody ProductCommVO vo) {
 		productCommService.del(vo);       
     }
-}
 
+	@GetMapping("/similar")
+	public List<ProductVO> similar(@RequestParam Map<String, Object> paramMap) {
+		return productService.similar(paramMap);
+	}
+}

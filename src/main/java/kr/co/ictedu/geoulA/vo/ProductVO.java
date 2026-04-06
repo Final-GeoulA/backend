@@ -18,4 +18,5 @@ public class ProductVO {
 	private int hit;
 	private int elike;
 	private String image;		// 이미지는 외부경로
+	private int hearted;		// 현재 유저의 좋아요 여부 (1: 좋아요, 0: 아님)
 }

@@ -30,6 +30,7 @@ public class GeoulAApplication extends SpringBootServletInitializer {
 			public void addCorsMappings(CorsRegistry registry) {
 				System.out.println("Cros Allow Origin 실행");
 				registry.addMapping("/**")
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 
 				.allowedOrigins("http://localhost:3001","http://localhost:3000","http://192.168.0.23:3001","http://192.168.0.23:3000")
@@ -37,6 +38,9 @@ public class GeoulAApplication extends SpringBootServletInitializer {
 =======
 				.allowedOrigins("http://localhost:3001","http://localhost:3000","http://192.168.0.56:3001","http://192.168.0.56:3000")
 >>>>>>> 3c2c07d36b62b82555444bc86be93a953e5ee61c
+=======
+				.allowedOrigins("http://localhost:3001","http://localhost:3000","http://192.168.0.156:3001","http://192.168.0.156:3000")
+>>>>>>> Stashed changes
 				.allowedHeaders("*")
 				.allowCredentials(true)
 				.allowedMethods("*").maxAge(3600);
