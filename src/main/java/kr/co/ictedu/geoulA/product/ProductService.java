@@ -31,8 +31,8 @@ public class ProductService {
 	public void unlike (int prodid) {
 		productDao.unlike(prodid);
 	}
-	public ProductVO detail(int prodid) {
-		return productDao.detail(prodid);
+	public ProductVO detail(Map<String, Object> map) {
+		return productDao.detail(map);
 	}
 	public void hit (int prodid) {
 		productDao.hit(prodid);
@@ -42,5 +42,8 @@ public class ProductService {
 	}
 	public void delete (int prodid) {
 		productDao.delete(prodid);
+	}
+	public List<ProductVO> similar(Map<String, Object> map) {
+		return productDao.similar(map);
 	}
 }
