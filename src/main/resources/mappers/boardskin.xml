@@ -5,7 +5,7 @@
 
 <mapper namespace="kr.co.ictedu.geoulA.boardSkin.BoardSkinDao">
 <insert id="add" parameterType="boardvo">
-	insert into board_skin values(SEQ_BOARD_SKIN.nextVal,#{title,jdbcType=VARCHAR},#{writer,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{imgn,jdbcType=VARCHAR},0,0,#{reip,jdbcType=VARCHAR},sysdate,0,#{textemotion})
+	insert into board_skin values(SEQ_BOARD_SKIN.nextVal,#{title,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{imgn,jdbcType=VARCHAR},0,0,#{reip,jdbcType=VARCHAR},sysdate,0,#{textemotion})
 </insert>
 
 <select id="blist" resultType="boardvo" parameterType="map">
@@ -42,7 +42,7 @@ OVER(ORDER BY board_skin_id desc) AS row_num FROM board_skin
             	<if test="searchType != null and searchValue != null and searchValue != ''">
                 	<choose>
                     	<when test="searchType == 1">
-                        	AND writer LIKE '%' || #{searchValue} || '%'
+                        	AND nickname LIKE '%' || #{searchValue} || '%'
                     	</when>
                     	<when test="searchType == 2">
                         	AND title LIKE '%' || #{searchValue} || '%'
@@ -64,7 +64,7 @@ update board_skin set elike=elike+1 where board_skin_id=#{num}
 UPDATE BOARD_SKIN SET title=#{title},content=#{content},IMGN=#{imgn},BDATE=SYSDATE WHERE BOARD_SKIN_ID = #{board_skin_id}
 </update>
     <select id="detail" parameterType="int" resultType="boardvo">
-        SELECT BOARD_SKIN_ID as board_skin_id, title, NICKNAME as writer,
+        SELECT BOARD_SKIN_ID as board_skin_id, title, NICKNAME,
         content, imgn, hit, elike, reip, bdate
         FROM board_skin WHERE board_skin_id=#{num}
     </select>
