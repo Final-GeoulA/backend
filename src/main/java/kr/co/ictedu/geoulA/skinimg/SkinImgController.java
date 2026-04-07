@@ -55,6 +55,7 @@ public class SkinImgController {
 
             result.put("success", cnt > 0);
             result.put("imgUrl", imgUrl);
+            result.put("userSkinImgId", vo.getUserSkinImgId());
             result.put("message", cnt > 0 ? "저장 성공" : "저장 실패");
         } catch (Exception e) {
             e.printStackTrace();

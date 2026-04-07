@@ -1,0 +1,68 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.ictedu.geoulA.skinanalysis.SkinAnalysisDao">
+
+    <!-- 피부 분석 결과 저장 -->
+    <insert id="insertDisease" parameterType="kr.co.ictedu.geoulA.vo.SkinAnalysisDiseaseVO">
+        <selectKey keyProperty="skinAnalysisDiseaseId" resultType="long" order="BEFORE">
+            SELECT seq_skin_analysis_disease.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO SKIN_ANALYSIS_DISEASE (
+            SKIN_ANALYSIS_DISEASE_ID,
+            USER_SKIN_IMG_ID,
+            DISEASE_DRY,
+            DISEASE_ATOPY,
+            DISEASE_PIMPLE,
+            DISEASE_INFLAM
+        ) VALUES (
+            #{skinAnalysisDiseaseId},
+            #{userSkinImgId},
+            #{diseaseDry},
+            #{diseaseAtopy},
+            #{diseasePimple},
+            #{diseaseInflam}
+        )
+    </insert>
+
+    <!-- 사용자 ID로 전체 분석 기록 조회 (날짜 오름차순) -->
+    <select id="selectDiseaseListByUserId"
+            parameterType="long"
+            resultType="kr.co.ictedu.geoulA.vo.SkinAnalysisDiseaseVO">
+        SELECT
+            d.SKIN_ANALYSIS_DISEASE_ID  AS skinAnalysisDiseaseId,
+            d.USER_SKIN_IMG_ID          AS userSkinImgId,
+            d.DISEASE_DRY               AS diseaseDry,
+            d.DISEASE_ATOPY             AS diseaseAtopy,
+            d.DISEASE_PIMPLE            AS diseasePimple,
+            d.DISEASE_INFLAM            AS diseaseInflam,
+            TO_CHAR(d.CREATED, 'YYYY.MM.DD') AS created,
+            i.IMG                       AS img,
+            TO_CHAR(i.BDATE, 'YYYY.MM.DD')   AS bdate
+        FROM SKIN_ANALYSIS_DISEASE d
+        JOIN USER_SKIN_IMG i ON d.USER_SKIN_IMG_ID = i.USER_SKIN_IMG_ID
+        WHERE i.USER_ID = #{userId}
+        ORDER BY i.BDATE ASC
+    </select>
+
+    <!-- userSkinImgId로 단건 조회 -->
+    <select id="selectDiseaseByUserSkinImgId"
+            parameterType="long"
+            resultType="kr.co.ictedu.geoulA.vo.SkinAnalysisDiseaseVO">
+        SELECT
+            d.SKIN_ANALYSIS_DISEASE_ID  AS skinAnalysisDiseaseId,
+            d.USER_SKIN_IMG_ID          AS userSkinImgId,
+            d.DISEASE_DRY               AS diseaseDry,
+            d.DISEASE_ATOPY             AS diseaseAtopy,
+            d.DISEASE_PIMPLE            AS diseasePimple,
+            d.DISEASE_INFLAM            AS diseaseInflam,
+            TO_CHAR(d.CREATED, 'YYYY.MM.DD') AS created,
+            i.IMG                       AS img,
+            TO_CHAR(i.BDATE, 'YYYY.MM.DD')   AS bdate
+        FROM SKIN_ANALYSIS_DISEASE d
+        JOIN USER_SKIN_IMG i ON d.USER_SKIN_IMG_ID = i.USER_SKIN_IMG_ID
+        WHERE d.USER_SKIN_IMG_ID = #{userSkinImgId}
+    </select>
+
+</mapper>

@@ -4,8 +4,11 @@
 
 <mapper namespace="kr.co.ictedu.geoulA.skinimg.SkinImgDao">
     <insert id="insertSkinImg" parameterType="kr.co.ictedu.geoulA.vo.SkinImgVO">
+        <selectKey keyProperty="userSkinImgId" resultType="long" order="BEFORE">
+            SELECT seq_user_skin_img.NEXTVAL FROM DUAL
+        </selectKey>
         INSERT INTO USER_SKIN_IMG (USER_SKIN_IMG_ID, USER_ID, IMG)
-        VALUES (seq_user_skin_img.NEXTVAL, #{userId}, #{img})
+        VALUES (#{userSkinImgId}, #{userId}, #{img})
     </insert>
    <select id="selectLatestSkinImgs" resultType="kr.co.ictedu.geoulA.vo.SkinImgVO">
     SELECT 
