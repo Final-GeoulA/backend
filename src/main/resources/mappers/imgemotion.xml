@@ -1,0 +1,24 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.ictedu.geoulA.imgEmotion.ImgEmotionDao">
+    <insert id="insertEmotion" parameterType="kr.co.ictedu.geoulA.vo.ImgEmotionVO">
+        <selectKey keyProperty="imgEmotionId" resultType="long" order="BEFORE">
+            SELECT SEQ_IMG_EMOTION.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO IMG_EMOTION (
+            IMG_EMOTION_ID,
+            IMG_ID,
+            IMGNAME,
+            EMOTION,
+            SSTIME
+        ) VALUES (
+            #{imgEmotionId},
+            #{imgId},
+            #{imgname},
+            #{emotion},
+            SYSDATE
+        )
+    </insert>
+</mapper>
