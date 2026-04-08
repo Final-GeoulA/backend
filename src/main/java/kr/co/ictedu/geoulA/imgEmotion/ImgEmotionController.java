@@ -27,7 +27,6 @@ public class ImgEmotionController {
 
     @PostMapping("/save")
     public Map<String, Object> saveEmotion(@RequestBody ImgEmotionVO vo, HttpSession session){
-    	System.out.println("test");
     	Map<String, Object> result = new HashMap<>();
     	
     	UsersVO loginMember = (UsersVO) session.getAttribute("loginMember");
