@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.ictedu.geoulA.config.S3Service;
+import kr.co.ictedu.geoulA.vo.UsersVO;
 import kr.co.ictedu.geoulA.vo.BoardSkinVO;
 import kr.co.ictedu.geoulA.vo.BoardSkinCommVO;
 import kr.co.ictedu.geoulA.vo.PageVO;
@@ -83,27 +84,37 @@ public class BoardSkinController {
 		pageVO.setNumPerPage(12);
 		String cPage = paramMap.get("cPage");
 
-//		int totalCnt = boardService.totalCount(paramMap);
-//		pageVO.setTotalRecord(totalCnt);
-//		
-//		int totalPage =(int)Math.ceil(totalCnt/ (double)pageVO.getNumPerPage());
-//		pageVO.setTotalPage(totalPage);
-//		
-//		int totalBlock=(int)Math.ceil(totalPage/(double)pageVO.getPagePerBlock());
-//		pageVO.setTotalBlock(totalBlock);
-		
+		Map<String, String> countMap = new HashMap<>(paramMap);
+
+		// mypage=true 일 때 세션에서 nickname 주입
+		if ("true".equals(paramMap.get("mypage"))) {
+			UsersVO loginMember = (UsersVO) req.getSession().getAttribute("loginMember");
+			if (loginMember != null) {
+				countMap.put("nickname", loginMember.getNickname());
+			}
+		}
+
+		int totalCnt = boardService.totalCount(countMap);
+		pageVO.setTotalRecord(totalCnt);
+
+		int totalPage =(int)Math.ceil(totalCnt/ (double)pageVO.getNumPerPage());
+		pageVO.setTotalPage(totalPage);
+
+		int totalBlock=(int)Math.ceil(totalPage/(double)pageVO.getPagePerBlock());
+		pageVO.setTotalBlock(totalBlock);
+
 		if(cPage !=null) {
 			pageVO.setNowPage(Integer.parseInt(cPage));
 		}else {
 			pageVO.setNowPage(1);
 		}
-		
+
 		pageVO.setBeginPerPage((pageVO.getNowPage()-1)*pageVO.getNumPerPage()+1);
 		pageVO.setEndPerPage(pageVO.getBeginPerPage()+pageVO.getNumPerPage()-1);
-		
-	
+
+
 		Map<String, Object> response = new HashMap<>();
-		Map<String, Object> map =new HashMap<>(paramMap);
+		Map<String, Object> map = new HashMap<>(countMap);
 		map.put("begin", String.valueOf(pageVO.getBeginPerPage()));
 		map.put("end", String.valueOf(pageVO.getEndPerPage()));
 		List<BoardSkinVO> list = boardService.blist(map);

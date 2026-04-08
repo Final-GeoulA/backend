@@ -14,7 +14,7 @@ SELECT board_skin_id, title, NICKNAME as writer,content,hit,elike,reip,bdate,tex
 OVER(ORDER BY board_skin_id desc) AS row_num FROM board_skin
 		<where>
             <if test="mypage == 'true'">
-                AND member_num = #{num}
+                AND NICKNAME = #{nickname}
             </if>
             <if test="searchType != null and searchValue != null and searchValue != ''">
                 <choose>
@@ -37,7 +37,7 @@ OVER(ORDER BY board_skin_id desc) AS row_num FROM board_skin
 		select count(*) cnt from board_skin
 			<where>
             	<if test="mypage == 'true'">
-                	AND member_num = #{num}
+                	AND NICKNAME = #{nickname}
             	</if>
             	<if test="searchType != null and searchValue != null and searchValue != ''">
                 	<choose>
@@ -61,7 +61,7 @@ update board_skin set hit=hit+1 where board_skin_id=#{num}
 update board_skin set elike=elike+1 where board_skin_id=#{num}
 </update>
 <update id="boardUpdate" parameterType="boardvo">
-UPDATE BOARD_SKIN SET title=#{title},content=#{content},BDATE=SYSDATE WHERE BOARD_SKIN_ID = #{board_skin_id}
+UPDATE BOARD_SKIN SET title=#{title},content=#{content},BDATE=SYSDATE,textemotion=#{textemotion}  WHERE BOARD_SKIN_ID = #{board_skin_id}
 </update>
     <select id="detail" parameterType="int" resultType="boardvo">
         SELECT BOARD_SKIN_ID as board_skin_id, title, NICKNAME as writer,
