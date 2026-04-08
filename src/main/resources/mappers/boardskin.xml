@@ -5,12 +5,14 @@
 
 <mapper namespace="kr.co.ictedu.geoulA.boardSkin.BoardSkinDao">
 <insert id="add" parameterType="boardvo">
-	insert into board_skin values(SEQ_BOARD_SKIN.nextVal,#{title,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{imgn,jdbcType=VARCHAR},0,0,#{reip,jdbcType=VARCHAR},sysdate,0,#{textemotion})
+
+	insert into board_skin values(SEQ_BOARD_SKIN.nextVal,#{title,jdbcType=VARCHAR},#{writer,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},0,0,#{reip,jdbcType=VARCHAR},sysdate,0,#{textemotion},#{role})
+
 </insert>
 
 <select id="blist" resultType="boardvo" parameterType="map">
-SELECT board_skin_id, title, NICKNAME,content,hit,elike,reip,bdate,imgn,textemotion, row_num FROM (
-SELECT board_skin_id, title, NICKNAME,content,hit,elike,reip,bdate,imgn,textemotion,ROW_NUMBER()
+SELECT board_skin_id, title, writer,content,hit,elike,reip,bdate,textemotion,role, row_num FROM (
+SELECT board_skin_id, title, NICKNAME as writer,content,hit,elike,reip,bdate,textemotion,role,ROW_NUMBER()
 OVER(ORDER BY board_skin_id desc) AS row_num FROM board_skin
 		<where>
             <if test="mypage == 'true'">
@@ -61,11 +63,16 @@ update board_skin set hit=hit+1 where board_skin_id=#{num}
 update board_skin set elike=elike+1 where board_skin_id=#{num}
 </update>
 <update id="boardUpdate" parameterType="boardvo">
-UPDATE BOARD_SKIN SET title=#{title},content=#{content},IMGN=#{imgn},BDATE=SYSDATE WHERE BOARD_SKIN_ID = #{board_skin_id}
+UPDATE BOARD_SKIN SET title=#{title},content=#{content},BDATE=SYSDATE WHERE BOARD_SKIN_ID = #{board_skin_id}
 </update>
     <select id="detail" parameterType="int" resultType="boardvo">
+<<<<<<< Updated upstream
         SELECT BOARD_SKIN_ID as board_skin_id, title, NICKNAME,
         content, imgn, hit, elike, reip, bdate
+=======
+        SELECT BOARD_SKIN_ID as board_skin_id, title, NICKNAME as writer,
+        content, hit, elike, reip, bdate,role
+>>>>>>> Stashed changes
         FROM board_skin WHERE board_skin_id=#{num}
     </select>
     <delete id="delete" parameterType="int">
