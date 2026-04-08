@@ -58,7 +58,7 @@ public class BoardSkinController {
 		try {
 			if (mf != null && !mf.isEmpty()) {
 				String imageUrl = s3Service.upload(mf);
-				vo.setImgn(imageUrl);
+				
 			}
 			boardService.add(vo);
 			return ResponseEntity.ok().body("업로드 성공!");
@@ -199,7 +199,7 @@ public class BoardSkinController {
 		try {
 			if (mf != null && !mf.isEmpty()) {
 				String imageUrl = s3Service.upload(mf);
-				vo.setImgn(imageUrl);
+				
 			}
 		} catch (IOException e) {
 			System.out.println("이미지가 정상적으로 업로드 되지 않았습니다.");

@@ -12,16 +12,17 @@ import lombok.Setter;
 public class BoardSkinVO {
 	private int board_skin_id;
 	private String title;
-	private String nickname;
+	private String writer;
 //	private int member_num;
 	private String content;
-	private String imgn;
+//	private String imgn;
 	private int hit;
 	private int elike;
 	private String reip;
 	private String bdate;
 //	private String comm_count;
 	private String textemotion;
+	private String role;
 	private MultipartFile mfile;
 	
 	
