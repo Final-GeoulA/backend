@@ -15,13 +15,14 @@ public class BoardSkinVO {
 	private String nickname;
 //	private int member_num;
 	private String content;
-	private String imgn;
+//	private String imgn;
 	private int hit;
 	private int elike;
 	private String reip;
 	private String bdate;
 //	private String comm_count;
 	private String textemotion;
+	private String role;
 	private MultipartFile mfile;
 	
 	
