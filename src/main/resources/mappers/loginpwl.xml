@@ -10,7 +10,7 @@
  	
  	<!-- 유저 정보 검색 -->
  	<select id="getUserInfo" parameterType="uvo" resultType="uvo">
- 		SELECT email, password FROM USERS WHERE email = #{email}
+ 		SELECT user_id, user_grade_id, email, password, nickname, age, skin_type, gender FROM USERS WHERE email = #{email}
  	</select>
  	
  	<!-- 비밀번호 변경 -->

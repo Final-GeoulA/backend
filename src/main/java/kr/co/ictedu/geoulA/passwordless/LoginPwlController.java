@@ -339,19 +339,9 @@ public class LoginPwlController {
 							userinfo.setEmail(email);
 							userinfo.setPassword(newPw);
 							loginPwlService.updatePassword(userinfo);
-							
-							Map<String, Object> result1 = loginPwlService.loginCheck(userinfo);
-	                        if (result != null && result1.get("CNT") != null) {
-	                            int cnt = ((Number) result1.get("CNT")).intValue();
-	                            if (cnt == 1) {                          	
-	                            	userinfo.setEmail(result1.get("EMAIL").toString());
-	                            	
-	                                session.setAttribute("loginMember", userinfo);
-							
-						}
-					    
-                            }
-                        }
+							session.setAttribute("loginMember", newUserinfo);
+
+                    }
 				    }
 				} catch(ParseException pe) {
 					pe.printStackTrace();
