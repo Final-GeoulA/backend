@@ -60,7 +60,7 @@ public class EmailSenderService {
 		 try {
 			MimeMessageHelper helper = new MimeMessageHelper(message,true);
 			System.out.println("toEmail = [" + toEmail + "]");
-			helper.setFrom("ictmankwon@naver.com");
+			helper.setFrom("zhalrtjddn01@naver.com");
 			helper.setTo(toEmail);
 			helper.setSubject("GeoulA팀의 회원가입 인증번호 발송");
 			StringBuilder body = new StringBuilder();
