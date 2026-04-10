@@ -54,6 +54,12 @@ desktop.ini
 ### Sensitive Config ###
 src/main/resources/properties/config.properties
 
+### Local JAR binaries ###
+libs/
+
+### Accidental files ###
+/git
+
 ### Uploaded Files ###
 src/main/resources/static/imagefile/
 
