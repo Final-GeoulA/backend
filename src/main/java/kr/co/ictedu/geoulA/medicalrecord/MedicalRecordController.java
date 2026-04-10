@@ -40,6 +40,12 @@ public class MedicalRecordController {
             return result;
         }
 
+        if (loginMember.getUser_grade_id() != 2) {
+            result.put("success", false);
+            result.put("message", "프리미엄 회원만 사용 가능한 기능입니다.");
+            return result;
+        }
+
         vo.setUserId(Long.valueOf(loginMember.getUser_id()));
 
         int cnt = medicalRecordService.insertMedicalRecord(vo);
@@ -61,12 +67,33 @@ public class MedicalRecordController {
             return result;
         }
 
+        if (loginMember.getUser_grade_id() != 2) {
+            Map<String, Object> result = new HashMap<>();
+            result.put("success", false);
+            result.put("message", "프리미엄 회원만 사용 가능한 기능입니다.");
+            return result;
+        }
+
         return medicalRecordService.selectMedicalRecordList((long) loginMember.getUser_id());
     }
 
     @PostMapping(value = "/ocr", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Map<String, Object> ocrTest(@org.springframework.web.bind.annotation.RequestParam("file") MultipartFile file) {
+    public Map<String, Object> ocrTest(@org.springframework.web.bind.annotation.RequestParam("file") MultipartFile file, HttpSession session) {
         Map<String, Object> result = new HashMap<>();
+
+        UsersVO loginMember = (UsersVO) session.getAttribute("loginMember");
+
+        if (loginMember == null) {
+            result.put("success", false);
+            result.put("message", "로그인이 필요합니다.");
+            return result;
+        }
+
+        if (loginMember.getUser_grade_id() != 2) {
+            result.put("success", false);
+            result.put("message", "프리미엄 회원만 사용 가능한 기능입니다.");
+            return result;
+        }
 
         try {
             String ocrJson = clovaOcrService.callOcr(file);
